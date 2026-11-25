@@ -58,15 +58,16 @@ Tres vistas que comparten los mismos datos: **Cliente** (`#pedir`), **Repartidor
   - Reparto en vivo (mapa ilustrativo, lo que va pasando, efectivo cobrado, gasolina y ahorro).
   - Números (gráfico semanal, sabores, uso de máquinas, ganancia por tarrina).
   - Clientes y promos (opiniones, segmentos).
-  - Automático (WhatsApp automáticos que se pueden prender o apagar; reglas: hora límite y "no entregar martes").
-  - Sabor del mes (editor) y Eventos.
+  - Sabor del mes (editor con foto del helado que se sube) y Eventos.
+  - Urgentes: Voglio marca un pedido como "urgente" y va primero en la ruta.
+  - Ganancia por tarrina: costo distinto por sabor (valores de ejemplo; pedir los reales).
+  - Gasolina: Extra/Ecopaís, Súper o Diésel con el precio oficial (objeto `FUEL` en `index.html`). El usuario quiere que se revisen cada semana.
+- **Administrador** (`#admin`): solo para el usuario, no para Voglio. Tiene lo automático (WhatsApp, hora límite, martes), el plan de mantenimiento mensual ($50 de ejemplo) y los precios de combustible. El usuario quiere cobrarles mantenimiento mensual por esto.
+- **Repartidor:** también puede tocar "Ir primero" para cambiar el orden, y elige el combustible de su moto.
 - **Fotos de sabores:** de Pexels, licencia libre (IDs en el README). `img/hero.jpg` es la foto real de las tarrinas de Voglio.
 
 ## Pendientes
-1. **GitHub Pages da 404.** Revisar https://github.com/bdutruels10/voglio/settings/pages:
-   - Source "Deploy from a branch", rama `main`, carpeta `/ (root)`.
-   - Si el repositorio es privado con cuenta gratis, hay que hacerlo público.
-   - URL esperada: https://bdutruels10.github.io/voglio/
+1. **GitHub Pages:** ya funciona en https://bdutruels10.github.io/voglio/ (desde `main` / root, con `.nojekyll`).
 2. **Confirmar con Voglio:**
    - Precios de 1 L, vasitos, menta y mayorista.
    - Si hay vasitos de todos los sabores.

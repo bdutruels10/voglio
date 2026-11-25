@@ -133,13 +133,22 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .page .wrap{padding-block:34px 72px;display:grid;gap:26px}
 .phead2{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap}
 .phead2 h2{font-size:clamp(30px,4.4vw,44px)}
-.promo{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;background:var(--lavanda);color:#151515;border-radius:var(--r);padding:10px 20px 10px 14px;text-decoration:none;transition:transform .2s}
+.promo{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;background:var(--lavanda);color:#151515;border-radius:var(--r);padding:18px 24px 18px 18px;text-decoration:none;transition:transform .2s;box-shadow:0 18px 36px -24px rgba(21,21,21,.55)}
+@media (max-width:560px){.promo{grid-template-columns:auto 1fr;padding:16px}.promo .go{grid-column:1/-1}}
+.promo .ph{width:96px;height:96px;border-radius:50%;background-size:cover;background-position:center;border:3px solid #F7E2D7}
+.promo .pp{display:block;font-weight:700;font-size:15px;margin-top:4px}
 .promo:hover{transform:translateY(-2px)}
-.promo .mini{display:flex;width:84px}
+.promo .mini{display:flex;width:120px}
 .promo .mini .lift{width:50%;margin-right:-6%}
-.promo b{font-family:var(--display);font-weight:400;font-size:20px}
-.promo .hand{color:#151515;font-size:22px}
-.promo .go{font-weight:800;font-size:14px;white-space:nowrap}
+.promo b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(28px,4.4vw,42px);line-height:1}
+.promo .hand{color:#3580AF;font-size:30px}
+.promo .go{font-weight:800;font-size:15px;white-space:nowrap;background:#151515;color:#F7E2D7;border-radius:14px;padding:12px 18px;text-align:center}
+.feature .stage.ph{padding:0;aspect-ratio:16/10;background-size:cover;background-position:center}
+.imgprev{display:flex;gap:10px;align-items:center}
+.imgprev span{width:64px;height:64px;border-radius:12px;background-size:cover;background-position:center;flex:none}
+.costin{width:84px;padding:6px 8px;font-size:14px}
+.urg{display:inline-block;background:#B3261E;color:#fff;font-size:11px;font-weight:800;padding:2px 7px;border-radius:6px;vertical-align:2px}
+.drow .first{border:1px solid #6B625E;background:transparent;color:#F7E2D7;border-radius:8px;padding:3px 8px;font-size:12px;font-weight:800}
 .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
 .fcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:transform .25s,box-shadow .25s}
 .fcard:hover{transform:translateY(-4px);box-shadow:0 22px 40px -26px rgba(21,21,21,.6)}
@@ -252,6 +261,8 @@ input[type=range]{padding:0;border:0;background:transparent;accent-color:var(--a
 .payopts button{border:1.5px solid #151515;background:transparent;border-radius:10px;padding:6px 10px;font-weight:800;font-size:13px;color:#151515}
 .payopts button[aria-pressed="true"]{background:#151515;color:#F7E2D7}
 .phone .map{--soft:#262220;--surface:#3A3431;--ink:#F7E2D7}
+.phone .segs button{color:#BFB3AC}
+.phone .segs button[aria-pressed="true"]{background:#F7E2D7;color:#151515}
 
 .scrim{position:fixed;inset:0;background:rgba(21,21,21,.45);z-index:40;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--surface);z-index:41;display:flex;flex-direction:column;box-shadow:-24px 0 48px -24px rgba(0,0,0,.45);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px);transform:translateX(102%);visibility:hidden;transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility .32s}
@@ -376,7 +387,7 @@ footer.foot .wordmark{font-size:40px}
 
 <div class="demobar"><div class="wrap">
   <span>Prototipo · prueba el recorrido completo: pide, confirma, reparte y sigue el pedido</span>
-  <nav class="views" aria-label="Vista"><a href="#pedir" id="t-site">Cliente</a><a href="#repartidor" id="t-driver">Repartidor</a><a href="#panel" id="t-panel">Panel de Voglio</a></nav>
+  <nav class="views" aria-label="Vista"><a href="#pedir" id="t-site">Cliente</a><a href="#repartidor" id="t-driver">Repartidor</a><a href="#panel" id="t-panel">Panel de Voglio</a><a href="#admin" id="t-admin">Administrador</a></nav>
 </div></div>
 
 <div id="v-site">
@@ -406,7 +417,7 @@ footer.foot .wordmark{font-size:40px}
     <div class="bizbar" id="bizbar" hidden><span>Precios para negocios: te cotizamos por WhatsApp. Mínimo 10 tarrinas.</span><button class="ghost" type="button" data-m="casa">Volver a precios normales</button></div>
     <a class="promo" href="#mes" id="promoLink"></a>
     <div class="fgrid" id="fgrid"></div>
-    <div class="minis"><a href="#eventos"><span>¿Una fiesta?<b>Calcula cuánto helado</b></span><span class="go">→</span></a><button type="button" data-m="negocio" id="bizBtn"><span>¿Tienes un negocio?<b>Pide al por mayor</b></span><span class="go">→</span></button></div>
+    <div class="minis"><a href="#eventos"><span>¿Tienes un evento?<b>Calcula cuánto helado</b></span><span class="go">→</span></a><button type="button" data-m="negocio" id="bizBtn"><span>¿Tienes un negocio?<b>Pide al por mayor</b></span><span class="go">→</span></button></div>
     <section class="where" aria-labelledby="whereT">
       <div style="display:grid;gap:6px"><span class="hand">¿Lo quieres ya?</span><h2 id="whereT">Encuéntranos en percha</h2><p class="note">¿Prefieres comprarlo tú? Búscanos aquí.</p></div>
       <div class="wlist" id="where"></div>
@@ -500,7 +511,6 @@ footer.foot .wordmark{font-size:40px}
     <button data-p="vivo" aria-pressed="false">Reparto en vivo<span class="live" id="liveDot" hidden></span></button>
     <button data-p="numeros" aria-pressed="false">Números</button>
     <button data-p="clientes" aria-pressed="false">Clientes y promos</button>
-    <button data-p="auto" aria-pressed="false">Automático</button>
     <button data-p="mes" aria-pressed="false">Sabor del mes</button>
     <button data-p="eventos" aria-pressed="false">Eventos<span class="cnt" id="c-ev">0</span></button>
   </nav>
@@ -543,10 +553,12 @@ footer.foot .wordmark{font-size:40px}
         <div class="card"><div class="cardhead"><h2>Lo que va pasando</h2><span class="note">en vivo</span></div><div class="feed" id="feed"></div></div>
         <div class="card">
           <h2>Gasolina</h2>
+          <div class="segs fuelpick" role="group" aria-label="Combustible de la moto"></div>
           <div class="two">
             <label for="r-kmg">Km por galón<input id="r-kmg" type="number" min="5" step="1" value="35"></label>
-            <label for="r-gal">Precio del galón<input id="r-gal" type="number" min="0" step="0.05" value="2.80"></label>
+            <label for="r-gal">Precio del galón<input id="r-gal" type="number" min="0" step="0.01" value="3.13"></label>
           </div>
+          <p class="note" id="r-fuel"></p>
           <p class="note" id="r-note"></p>
         </div>
       </div>
@@ -575,7 +587,7 @@ footer.foot .wordmark{font-size:40px}
           <label for="cap">Capacidad por semana (litros)<input id="cap" type="number" min="50" step="10" value="400"></label>
           <p class="note" id="cap-msg"></p>
         </div>
-        <div class="card"><h2>Ganancia por tarrina</h2><label for="cost">Costo de producir 1 tarrina de ½ L<input id="cost" type="number" min="0" step="0.1" value="2.40"></label><div class="list tabular" id="margin"></div></div>
+        <div class="card"><h2>Ganancia por tarrina</h2><p class="note">Escribe cuánto cuesta producir una tarrina de ½ L de cada sabor. Los valores son de ejemplo hasta que Voglio confirme los reales.</p><div class="list tabular" id="margin"></div></div>
       </div>
     </div>
   </div>
@@ -597,7 +609,44 @@ footer.foot .wordmark{font-size:40px}
     </div>
   </div>
 
-  <div id="p-auto" hidden class="pcols">
+  <div id="p-mes" hidden class="pcols">
+    <form class="card" id="mf" novalidate>
+      <div class="cardhead"><h2>Producto del mes</h2><label class="switchrow" for="m-on"><input type="checkbox" id="m-on" checked> Publicado</label></div>
+      <p class="note">Usa sabores que ya tienen registro sanitario: combinaciones, packs o precios especiales.</p>
+      <label for="m-title">Nombre<input id="m-title"></label>
+      <label for="m-desc">Descripción<textarea id="m-desc" rows="2"></textarea></label>
+      <div class="two">
+        <label for="m-a">Sabor 1<select id="m-a"></select></label>
+        <label for="m-b">Sabor 2<select id="m-b"></select></label>
+        <label for="m-price">Precio del pack<input id="m-price" type="number" step="0.5" min="0"></label>
+        <label for="m-until">Disponible hasta<input id="m-until" type="date"></label>
+      </div>
+      <label for="m-img">Foto del helado<input id="m-img" type="file" accept="image/*"></label>
+      <div class="imgprev" id="m-imgprev"></div>
+      <p class="note">Los cambios se ven al instante en el sitio.</p>
+    </form>
+    <div class="card">
+      <div class="cardhead"><h2>Votación</h2><label class="switchrow" for="v-on"><input type="checkbox" id="v-on" checked> Abierta</label></div>
+      <label for="v-q">Pregunta<input id="v-q"></label>
+      <div style="display:grid;gap:8px" id="vedit"></div>
+      <div class="edrow"><input id="v-new" placeholder="Nueva opción" aria-label="Nueva opción"><button class="btn primary sm" type="button" id="v-add">Agregar</button></div>
+      <button class="ghost" type="button" id="v-reset" style="justify-self:start">Reiniciar votos</button>
+    </div>
+  </div>
+
+  <div id="p-eventos" hidden class="card"><h2>Cotizaciones de eventos</h2><div class="list" id="evlist"></div></div>
+</div>
+</div>
+<div id="v-admin" hidden>
+<div class="wrap pwrap">
+  <div class="phead"><div><span class="hand">Solo para ti</span><h1>Administración</h1><p class="note">Voglio no ve esta sección. Aquí manejas lo automático y el mantenimiento mensual.</p></div></div>
+  <div class="kpis">
+    <div class="kpi"><span>Plan de mantenimiento</span><b class="tabular">$50</b><small>al mes · próximo cobro 1 dic</small></div>
+    <div class="kpi"><span>Sitio</span><b style="font-size:22px">En línea</b><small>sin caídas este mes</small></div>
+    <div class="kpi"><span>Mensajes enviados</span><b class="tabular" id="a-msgs">0</b><small>hoy por WhatsApp</small></div>
+    <div class="kpi"><span>Combustible</span><b style="font-size:22px">Al día</b><small id="a-fuel"></small></div>
+  </div>
+  <div id="p-auto" class="pcols">
     <div class="card">
       <h2>Lo que la página hace sola</h2>
       <p class="note">Prende o apaga cada automatización. Las que mandan mensajes usan WhatsApp Business.</p>
@@ -614,30 +663,7 @@ footer.foot .wordmark{font-size:40px}
     </div>
   </div>
 
-  <div id="p-mes" hidden class="pcols">
-    <form class="card" id="mf" novalidate>
-      <div class="cardhead"><h2>Producto del mes</h2><label class="switchrow" for="m-on"><input type="checkbox" id="m-on" checked> Publicado</label></div>
-      <p class="note">Usa sabores que ya tienen registro sanitario: combinaciones, packs o precios especiales.</p>
-      <label for="m-title">Nombre<input id="m-title"></label>
-      <label for="m-desc">Descripción<textarea id="m-desc" rows="2"></textarea></label>
-      <div class="two">
-        <label for="m-a">Sabor 1<select id="m-a"></select></label>
-        <label for="m-b">Sabor 2<select id="m-b"></select></label>
-        <label for="m-price">Precio del pack<input id="m-price" type="number" step="0.5" min="0"></label>
-        <label for="m-until">Disponible hasta<input id="m-until" type="date"></label>
-      </div>
-      <p class="note">Los cambios se ven al instante en el sitio.</p>
-    </form>
-    <div class="card">
-      <div class="cardhead"><h2>Votación</h2><label class="switchrow" for="v-on"><input type="checkbox" id="v-on" checked> Abierta</label></div>
-      <label for="v-q">Pregunta<input id="v-q"></label>
-      <div style="display:grid;gap:8px" id="vedit"></div>
-      <div class="edrow"><input id="v-new" placeholder="Nueva opción" aria-label="Nueva opción"><button class="btn primary sm" type="button" id="v-add">Agregar</button></div>
-      <button class="ghost" type="button" id="v-reset" style="justify-self:start">Reiniciar votos</button>
-    </div>
-  </div>
-
-  <div id="p-eventos" hidden class="card"><h2>Cotizaciones de eventos</h2><div class="list" id="evlist"></div></div>
+  <div class="card"><h2>Precios de combustible</h2><p class="note" id="a-fuelnote"></p><div class="list tabular" id="a-fuellist"></div></div>
 </div>
 </div>
 <div class="toast" id="toast" role="status"></div>
@@ -742,16 +768,25 @@ function setStatus(o,st,extra=""){
 
 /* ======================= route ======================= */
 const hav=(a,b)=>{const R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180,x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;return 2*R*Math.asin(Math.sqrt(x))*1.35};
-const tourLen=t=>{let d=0,p=PLANTA;for(const s of t){d+=hav(p,s);p=s}return t.length?d+hav(p,PLANTA):0};
+const tourLen=(t,from=PLANTA,back=true)=>{let d=0,p=from;for(const s of t){d+=hav(p,s);p=s}return t.length?d+(back?hav(p,PLANTA):0):0};
 function nearest(stops,from){let rest=stops.slice(),t=[],p=from;while(rest.length){let bi=0,bd=1e9;rest.forEach((s,i)=>{const d=hav(p,s);if(d<bd){bd=d;bi=i}});p=rest.splice(bi,1)[0];t.push(p)}return t}
-function optimize(stops){let t=nearest(stops,PLANTA),imp=true;
-  while(imp){imp=false;for(let i=0;i<t.length-1;i++)for(let j=i+1;j<t.length;j++){const n=t.slice(0,i).concat(t.slice(i,j+1).reverse(),t.slice(j+1));if(tourLen(n)<tourLen(t)-1e-9){t=n;imp=true}}}return t}
+function optimize(stops,from=PLANTA,back=true){let t=nearest(stops,from),imp=true;
+  while(imp){imp=false;for(let i=0;i<t.length-1;i++)for(let j=i+1;j<t.length;j++){const n=t.slice(0,i).concat(t.slice(i,j+1).reverse(),t.slice(j+1));if(tourLen(n,from,back)<tourLen(t,from,back)-1e-9){t=n;imp=true}}}return t}
+/* Urgentes primero (los marca Voglio en el panel); luego el resto por la ruta más corta. El repartidor puede elegir cuál va primero. */
+function sequence(pend,from,opt){const u=pend.filter(o=>o.urgent),n=pend.filter(o=>!o.urgent);const a=opt?optimize(u,from,false):nearest(u,from),s=a.length?a[a.length-1]:from;let t=a.concat(opt?optimize(n,s):nearest(n,s));const f=t.find(o=>o.first);if(f)t=[f,...t.filter(o=>o!==f)];return t}
 let ROUTE=[],START=9*60,DONE_ORDER=[];
+/* Precios oficiales en Ecuador (USD por galón). Se actualizan cada semana. */
+const FUEL={actualizado:"2026-11-25",desde:"2026-11-12",hasta:"2026-12-11",tipos:{extra:["Extra / Ecopaís",3.125],super:["Súper",5.46],diesel:["Diésel",3.06]}};
+let fuelType="extra";
+function fuelPick(){document.querySelectorAll(".fuelpick").forEach(g=>g.innerHTML=Object.entries(FUEL.tipos).map(([k,[n]])=>`<button type="button" data-fuel="${k}" aria-pressed="${k===fuelType}">${n}</button>`).join(""))}
+function setFuel(k){fuelType=k;const[n,pr]=FUEL.tipos[k];$("r-gal").value=pr.toFixed(2);$("r-fuel").textContent=`${DRIVER} usa ${n}: $${pr.toFixed(3)} el galón. Precio oficial vigente del ${fmtShort(FUEL.desde)} al ${fmtShort(FUEL.hasta)}, revisado el ${fmtShort(FUEL.actualizado)}.`;fuelPick();if(ptab==="vivo")routeSaving()}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-fuel]");if(!b)return;setFuel(b.dataset.fuel);if(b.closest(".phone"))toast("Combustible guardado: "+FUEL.tipos[b.dataset.fuel][0])});
+function renderFuelAdmin(){$("a-fuel").textContent="revisado el "+fmtShort(FUEL.actualizado);$("a-fuelnote").textContent=`Precios oficiales en Ecuador, vigentes del ${fmtShort(FUEL.desde)} al ${fmtShort(FUEL.hasta)}. Se revisan cada semana y se actualizan solos en el panel y en la app del repartidor.`;$("a-fuellist").innerHTML=Object.values(FUEL.tipos).map(([n,p])=>`<div><span>${n}</span><b>$${p.toFixed(3)} / galón</b></div>`).join("")}
 function plan(){
   const inRoute=orders.filter(o=>o.date===TODAY&&o.st!=="nuevo");
   const done=DONE_ORDER.filter(o=>inRoute.includes(o)&&o.st==="entregado");
   const pend=inRoute.filter(o=>!done.includes(o));
-  ROUTE=done.concat(routeStarted?nearest(pend,done.length?done[done.length-1]:PLANTA):optimize(pend));
+  ROUTE=done.concat(sequence(pend,done.length?done[done.length-1]:PLANTA,!routeStarted));
   let m=START,pp=PLANTA;ROUTE.forEach(o=>{m+=hav(pp,o)/22*60;o.eta=m;m+=6;pp=o})}
 const nextStop=()=>ROUTE.find(o=>o.st!=="entregado");
 function drawMap(el,{focus=null,compact=false}={}){
@@ -799,7 +834,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-key]");if(
   const z=e.target.closest("[data-size]");if(z){const[k,v]=z.dataset.size.split("|");sel[k]=v;z.parentElement.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===z));const a=$("art-"+k);a.classList.toggle("isv",v==="v");a.innerHTML=v==="v"?vaso(k):pint(k);a.animate?.([{transform:"scale(.85)",opacity:.4},{transform:"scale(1)",opacity:1}],{duration:260,easing:"cubic-bezier(.3,1.4,.5,1)"});renderCtl()}});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;mode=b.dataset.m;$("bizbar").hidden=mode!=="negocio";$("bizBtn").hidden=mode==="negocio";
   if(mode==="negocio"){delete cart.mes}renderGrid();renderPromo();$("sabores").scrollIntoView({behavior:"smooth"})});
-function renderPromo(){const l=$("promoLink");l.hidden=!month.on||mode==="negocio";l.innerHTML=`<div class="mini"><div class="lift">${pint(month.a)}</div><div class="lift">${pint(month.b)}</div></div><span><span class="hand">Sabor del mes</span><br><b>${esc(month.title)}</b> · ${money(month.price)}</span><span class="go">Ver →</span>`}
+function renderPromo(){const l=$("promoLink");l.hidden=!month.on||mode==="negocio";l.innerHTML=`${month.img?`<span class="ph" style="background-image:url(${month.img})"></span>`:`<div class="mini"><div class="lift">${pint(month.a)}</div><div class="lift">${pint(month.b)}</div></div>`}<span><span class="hand">Sabor del mes</span><b>${esc(month.title)}</b><span class="pp">${byK(month.a).n} + ${byK(month.b).n} · ${money(month.price)}</span></span><span class="go">Lo quiero →</span>`}
 function fly(key,src){if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
   const k=key==="mes"?month.a:base(key),from=src.getBoundingClientRect(),to=$("openCart").getBoundingClientRect();
   const el=document.createElement("div");el.className="flyer";el.style.cssText=`left:${from.left+from.width/2-26}px;top:${from.top-40}px;width:52px`;el.innerHTML=isV(key)?vaso(k):pint(k);document.body.appendChild(el);
@@ -885,7 +920,7 @@ function renderDriver(){
   else if(!routeStarted)main=`<div class="dnext"><span class="hand">Listo para salir</span><h3>${tot} entregas · ${tourLen(ROUTE).toFixed(1)} km</h3><p style="font-size:14px">Ruta ordenada para gastar menos gasolina. Revisa que todas las tarrinas estén en el cooler.</p>${waiting?`<p style="font-size:13px;color:#A8620E;font-weight:800">${waiting} pedido${waiting>1?"s":""} de hoy aún sin confirmar en el panel.</p>`:""}<button class="btn primary block" type="button" id="d-start">Salir a repartir</button></div>`;
   else if(nx){const pay=nx.pay.startsWith("Efectivo")?"Cobrar en efectivo":nx.pay.startsWith("Factura")?"Factura a 15 días":"Ya pagado por transferencia";
     main=`<div class="dnext"><div style="display:flex;justify-content:space-between;align-items:center"><span class="hand">Parada ${done+1} de ${tot}</span><span style="font-weight:900" class="tabular">${hhmm(nx.eta)}</span></div>
-      <h3>${esc(nx.name)}</h3><p style="font-size:14px">${esc(nx.addr)} · ${esc(nx.sector)}</p><p style="font-size:14px;font-weight:700">${esc(itemsTxt(nx))}</p>
+      <h3>${esc(nx.name)}${nx.urgent?' <span class="urg">Urgente</span>':""}</h3><p style="font-size:14px">${esc(nx.addr)} · ${esc(nx.sector)}</p><p style="font-size:14px;font-weight:700">${esc(itemsTxt(nx))}</p>
       <div style="display:flex;justify-content:space-between;align-items:center;background:#FFFAF6;border-radius:12px;padding:10px 12px"><span style="font-size:13px;font-weight:800">${pay}</span><b class="tabular" style="font-size:20px">${nx.tipo==="negocio"?"—":money(totOf(nx))}</b></div>
       ${nx.pay.startsWith("Efectivo")?`<div class="payopts" role="group" aria-label="Cómo pagó">${["Efectivo","Transferencia"].map(p=>`<button type="button" data-pay="${p}" aria-pressed="${payPick===p}">Pagó con ${p.toLowerCase()}</button>`).join("")}</div>`:""}
       <div class="two"><a class="btn quiet sm" href="https://www.google.com/maps/dir/?api=1&destination=${nx.lat},${nx.lng}" target="_blank" rel="noopener">Cómo llegar</a><a class="btn quiet sm" href="${wa(nx.phone)}" target="_blank" rel="noopener">Escribir al cliente</a></div>
@@ -894,14 +929,16 @@ function renderDriver(){
   $("phone").innerHTML=`<div class="top"><span class="wordmark">Voglio</span><span class="muted">Hola, ${DRIVER}</span></div>
     <div class="dcard"><div style="display:flex;justify-content:space-between"><b>Reparto de hoy</b><span class="muted tabular">${done}/${tot} entregados</span></div><div class="dprog"><i style="width:${tot?done/tot*100:0}%"></i></div></div>
     ${main}<div class="map" id="dmap"></div>
-    <div class="dcard" style="gap:0"><b style="padding-bottom:6px">Paradas</b>${ROUTE.map((o,i)=>`<div class="drow ${o.st==="entregado"?"done":""}"><span class="n">${o.st==="entregado"?"✓":i+1}</span><span><b>${esc(o.name.split(" · ")[0])}</b><br><span class="muted">${esc(o.sector)}</span></span><span class="muted tabular">${hhmm(o.eta)}</span></div>`).join("")||'<span class="muted">Sin paradas</span>'}</div>`;
+    <div class="dcard" style="gap:0"><b style="padding-bottom:6px">Paradas</b>${ROUTE.map((o,i)=>`<div class="drow ${o.st==="entregado"?"done":""}"><span class="n">${o.st==="entregado"?"✓":i+1}</span><span><b>${esc(o.name.split(" · ")[0])}</b>${o.urgent&&o.st!=="entregado"?' <span class="urg">Urgente</span>':""}<br><span class="muted">${esc(o.sector)}</span></span>${o.st!=="entregado"&&o!==nx?`<button class="first" type="button" data-first="${o.id}">Ir primero</button>`:`<span class="muted tabular">${hhmm(o.eta)}</span>`}</div>`).join("")||'<span class="muted">Sin paradas</span>'}<p class="muted" style="padding-top:8px">¿Cambió algo? Toca “Ir primero” en la parada que quieras hacer antes.</p></div>
+    <div class="dcard"><b>Mi moto usa</b><div class="segs fuelpick" role="group" aria-label="Combustible" style="background:#3A3431"></div></div>`;fuelPick();
   drawMap($("dmap"),{compact:true});
   const s=$("d-start");if(s)s.onclick=()=>{routeStarted=true;START=(nowMin()>=7*60&&nowMin()<=17*60)?nowMin():10*60;plan();log(`${DRIVER} salió a repartir con ${ROUTE.length} pedidos`);ROUTE.forEach(o=>{o.st="camino";addEvent(o,"camino");sendMsg("salio",o,`${firstName(o)}, tu pedido ${o.id} va en camino. Síguelo aquí: voglio.ec/s/${o.id}`)});
     const n=nextStop();if(n)sendMsg("llega",n,`${firstName(n)}, eres la primera entrega. Llegamos en unos minutos 🛵`);renderAll();toast("Ruta iniciada. Los clientes ya fueron avisados por WhatsApp.")};
   const d=$("d-done");if(d)d.onclick=()=>{const o=nextStop(),how=o.pay.startsWith("Efectivo")?payPick:o.pay;o.paid=how;if(how==="Efectivo")o.cash=totOf(o);DONE_ORDER.push(o);
     setStatus(o,"entregado",how==="Efectivo"?`cobró ${money(totOf(o))} en efectivo`:how);const n=nextStop();if(n)sendMsg("llega",n,`${firstName(n)}, eres la siguiente entrega. Llegamos en unos 10 minutos 🛵`);payPick="Efectivo";renderAll();toast(`Entregado. ${firstName(o)} recibió su WhatsApp.`)};
   const f=$("d-fail");if(f)f.onclick=()=>{const o=nextStop();o.st="prep";o.date=dayOff(1);o.failed=true;o.events.push({t:hhmm(nowMin()),txt:"No se pudo entregar · pasa a mañana"});log(`<b>${o.id}</b>: el cliente no estaba. Se movió a mañana.`,"bad");sendMsg("llega",o,`Hola ${firstName(o)}, pasamos y no te encontramos. ¿Te lo llevamos mañana?`);renderAll()};
-  $("phone").querySelectorAll("[data-pay]").forEach(b=>b.onclick=()=>{payPick=b.dataset.pay;renderDriver()})}
+  $("phone").querySelectorAll("[data-pay]").forEach(b=>b.onclick=()=>{payPick=b.dataset.pay;renderDriver()});
+  $("phone").querySelectorAll("[data-first]").forEach(b=>b.onclick=()=>{const o=orders.find(x=>x.id===b.dataset.first);orders.forEach(x=>x.first=false);o.first=true;log(`${DRIVER} cambió el orden: <b>${o.id}</b> (${esc(o.name.split(" · ")[0])}) va primero`);renderAll();toast(`${o.name.split(" · ")[0]} va primero. La ruta se reordenó.`)})}
 
 /* ======================= panel ======================= */
 let ptab="hoy";
@@ -919,8 +956,9 @@ function renderPanel(){
   $("k-week").textContent="$"+(W_CASA[7]+W_NEG[7]);$("k-weeks").textContent=`$${W_CASA[7]} casa · $${W_NEG[7]} negocios`;
   const rated=orders.filter(o=>o.reviewSent),avg=(4.8*41+rated.reduce((a,o)=>a+o.rating,0))/(41+rated.length);$("k-rate").textContent=avg.toFixed(1)+" ★";$("k-rates").textContent=`${41+rated.length} calificaciones`;
   $("board").innerHTML=ST.map(s=>{const list=todays.filter(o=>o.st===s.k);return`<div class="col"><h3><span>${s.t}</span><span class="tabular">${list.length}</span></h3>${list.map(o=>{
+    const urg=s.k==="nuevo"||s.k==="prep"||s.k==="camino"?`<button class="ghost${o.urgent?" dark":""}" type="button" data-urg="${o.id}" aria-pressed="${!!o.urgent}">${o.urgent?"Urgente ✓":"Marcar urgente"}</button>`:"";
     const act=s.k==="nuevo"?`<button class="ghost dark" type="button" data-go="${o.id}">Confirmar</button>`:s.k==="prep"?`<span class="tagx">${routeStarted?"Sale en el próximo viaje":"Listo para el reparto"}</span>`:s.k==="camino"?`<span class="tagx">Llega ${o.eta?hhmm(o.eta):""}</span>`:`<span class="tagx">${o.paid?esc(o.paid):""}${o.rating?" · "+o.rating+" ★":""}</span>`;
-    return`<div class="ocard${o.id===lastId?" flash":""}" style="--st:${s.c}"><div class="row"><b>${esc(o.name.split(" · ")[0])}</b><span class="tagx">${o.id}</span></div><span class="it">${esc(itemsTxt(o))}</span><span class="it">${esc(o.sector)} · ${o.tipo==="negocio"?"mayorista":money(totOf(o))}</span><div class="row">${act}<a class="ghost" href="${wa(o.phone)}" target="_blank" rel="noopener">WhatsApp</a></div></div>`}).join("")||'<span class="note" style="padding:4px">—</span>'}</div>`}).join("");
+    return`<div class="ocard${o.id===lastId?" flash":""}" style="--st:${s.c}"><div class="row"><b>${esc(o.name.split(" · ")[0])}</b><span class="tagx">${o.id}</span></div><span class="it">${esc(itemsTxt(o))}</span><span class="it">${esc(o.sector)} · ${o.tipo==="negocio"?"mayorista":money(totOf(o))}</span><div class="row">${act}<a class="ghost" href="${wa(o.phone)}" target="_blank" rel="noopener">WhatsApp</a></div>${urg?`<div class="row">${urg}</div>`:""}</div>`}).join("")||'<span class="note" style="padding:4px">—</span>'}</div>`}).join("");
   $("upcoming").innerHTML=orders.filter(o=>o.date>TODAY).sort((a,b)=>a.date.localeCompare(b.date)).map(o=>`<div><span><b>${esc(o.name)}</b><br><small>${fmtDate(o.date)} · ${esc(itemsTxt(o))}${o.failed?" · reprogramado":""}</small></span><span class="pill" style="--c:${stOf(o.st).c}"><i></i>${stOf(o.st).t}</span></div>`).join("")||'<p class="note">Sin pedidos para los próximos días.</p>';
   const need={};F.forEach(f=>need[f.k]=0);orders.filter(o=>o.st==="nuevo"||o.st==="prep").forEach(o=>{for(const k in o.items){const q=o.items[k];if(k==="mes"){need[month.a]+=q;need[month.b]+=q}else if(need[base(k)]!=null)need[base(k)]+=q}});
   const tot=Object.values(need).reduce((a,b)=>a+b,0),mx=Math.max(1,...Object.values(need));
@@ -939,7 +977,7 @@ function renderPanel(){
   $("feed").innerHTML=feed.map(f=>`<div class="${f.fresh?"new":""}"><time>${f.t}</time><span style="${f.cls==="bad"?"color:var(--bad)":f.cls==="ok"?"color:var(--ok)":""}">${f.txt}</span></div>`).join("")||'<p class="note">Aquí verás cada pedido, salida y entrega en el momento en que pasa. Prueba confirmar un pedido o abre la app del repartidor.</p>';feed.forEach(f=>f.fresh=false);
   $("autos").innerHTML=AUTOS.map(([k,t,d])=>`<div class="auto"><span><b>${t}</b><small>${d}</small></span><label class="sw"><input type="checkbox" data-auto="${k}" ${AUTO[k]?"checked":""} aria-label="${t}"><span></span></label></div>`).join("");
   $("msgs").innerHTML=msgs.map(m=>`<div><time>${m.t}</time><span><b>${esc(m.to)}</b><br><span class="msg">${esc(m.txt)}</span></span></div>`).join("")||'<p class="note">Todavía no se ha enviado nada hoy. Confirma un pedido o sal a repartir y mira cómo aparecen.</p>';
-  $("msgCount").textContent=msgs.length?msgs.length+" enviados":"";
+  $("msgCount").textContent=msgs.length?msgs.length+" enviados":"";$("a-msgs").textContent=msgs.length;renderFuelAdmin();
   const ms=W_CASA.slice(4).reduce((a,b)=>a+b,0)+W_NEG.slice(4).reduce((a,b)=>a+b,0);
   $("n-month").textContent="$"+ms.toLocaleString("es-EC");$("n-goal").textContent=`${Math.round(ms/4500*100)}% de la meta de $4.500`;
   const tmx=Math.max(...Object.values(TOP30));
@@ -956,12 +994,13 @@ function routeSaving(){const kmg=+$("r-kmg").value||35,gal=+$("r-gal").value||2.
   $("saving").innerHTML=`<div><span class="note">Recorrido</span><b class="tabular">${cur.toFixed(1)} km</b></div><div><span class="note">Gasolina hoy</span><b class="tabular">${money(cost(cur))}</b></div><div class="good"><span class="note">Ahorro al mes</span><b class="tabular">${money(Math.max(0,cost(byId-opt))*24)}</b></div>`;
   $("r-note").textContent=`Si se repartiera en el orden en que llegaron los pedidos serían ${byId.toFixed(1)} km. Ahorro calculado con 24 días de reparto al mes.`}
 ["r-kmg","r-gal"].forEach(id=>$(id).addEventListener("input",routeSaving));
-$("board").addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(!b)return;const o=orders.find(x=>x.id===b.dataset.go);setStatus(o,"prep");
+$("board").addEventListener("click",e=>{const u=e.target.closest("[data-urg]");if(u){const o=orders.find(x=>x.id===u.dataset.urg);o.urgent=!o.urgent;if(o.urgent)log(`<b>${o.id}</b> marcado como urgente: va primero en la ruta`,"bad");renderAll();toast(o.urgent?`${o.id} va primero en la ruta del repartidor`:`${o.id} ya no es urgente`);return}
+  const b=e.target.closest("[data-go]");if(!b)return;const o=orders.find(x=>x.id===b.dataset.go);setStatus(o,"prep");
   if(routeStarted&&o.date===TODAY){o.st="camino";addEvent(o,"camino");sendMsg("salio",o,`${firstName(o)}, tu pedido ${o.id} va en camino. Síguelo aquí: voglio.ec/s/${o.id}`);renderAll()}toast(`${o.id} confirmado. ${firstName(o)} recibió su WhatsApp.`)});
 $("autos").addEventListener("change",e=>{const k=e.target.dataset.auto;if(k){AUTO[k]=e.target.checked;toast(e.target.checked?"Automatización activada":"Automatización pausada")}});
 $("evlist").addEventListener("click",e=>{const b=e.target.closest("[data-ev]");if(!b)return;evReq[+b.dataset.ev].st="Cotización enviada";renderPanel()});
 $("ptabs").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;ptab=b.dataset.p;$("ptabs").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));
-  ["hoy","vivo","numeros","clientes","auto","mes","eventos"].forEach(p=>$("p-"+p).hidden=p!==ptab);renderPanel()});
+  ["hoy","vivo","numeros","clientes","mes","eventos"].forEach(p=>$("p-"+p).hidden=p!==ptab);renderPanel()});
 function drawWeekly(){
   const W=720,H=260,m={l:48,r:8,t:18,b:28},iw=W-m.l-m.r,ih=H-m.t-m.b,tot=W_CASA.map((v,i)=>v+W_NEG[i]),max=Math.ceil(Math.max(...tot)/250)*250;
   const y=v=>m.t+ih-v/max*ih,gap=iw/WEEKS.length,bw=gap*.56;
@@ -975,8 +1014,11 @@ function drawWeekly(){
 function capacity(){const cap=Math.max(1,+$("cap").value||400),made=286,p=Math.round(made/cap*100);
   $("cap-pct").textContent=p+"%";$("cap-txt").textContent=`${made} de ${cap} litros esta semana`;$("cap-bar").style.width=Math.min(100,p)+"%";
   $("cap-msg").textContent=p<75?`Caben ${cap-made} litros más por semana, unas ${(cap-made)*2} tarrinas. Es lo que se puede vender a nuevos negocios sin comprar otra máquina.`:"Las máquinas están casi llenas. Conviene planificar más turnos o revisar precios."}
-function margin(){const c=+$("cost").value||0;$("margin").innerHTML=F.slice().sort((a,b)=>b.p-a.p).map(f=>{const g=f.p-c;return`<div><span>${f.n}${f.ask?" <small>(por confirmar)</small>":""}</span><b>${money(g)} <small>· ${Math.round(g/f.p*100)}%</small></b></div>`}).join("")}
-$("cap").addEventListener("input",capacity);$("cost").addEventListener("input",margin);
+const COST={pistacho:3.40,avellana:3.10,chocolate:2.60,menta:2.40,dulcedeleche:2.30,vainilla:2.00,chicle:1.90};
+const mg=f=>{const g=f.p-(COST[f.k]||0);return`${money(g)} <small>· ${Math.round(g/f.p*100)}%</small>`};
+function margin(){if($("margin").dataset.ok)return;$("margin").dataset.ok=1;$("margin").innerHTML=`<div><small>Sabor · precio</small><small>Cuesta hacerla → ganancia</small></div>`+F.slice().sort((a,b)=>b.p-a.p).map(f=>`<div><span><b>${f.n}</b><br><small>${money(f.p)}${f.ask?" · precio por confirmar":""}</small></span><span style="display:flex;gap:10px;align-items:center"><input class="costin" type="number" min="0" step="0.1" value="${COST[f.k].toFixed(2)}" data-cost="${f.k}" aria-label="Costo de ${f.n}"><b id="mg-${f.k}" style="min-width:96px;text-align:right">${mg(f)}</b></span></div>`).join("")}
+$("margin").addEventListener("input",e=>{const k=e.target.dataset.cost;if(!k)return;COST[k]=+e.target.value||0;$("mg-"+k).innerHTML=mg(byK(k))});
+$("cap").addEventListener("input",capacity);
 function promoPrev(){$("pm-prev").textContent=$("pm-text").value||"Escribe tu mensaje";const n={todos:212+orders.filter(o=>o.promo).length,casa:184,negocio:28,pista:97,dormidos:41}[$("pm-to").value];$("pm-send").textContent=`Programar envío a ${n} contactos`}
 $("pm-text").addEventListener("input",promoPrev);$("pm-to").addEventListener("change",promoPrev);
 $("pm-send").onclick=()=>$("pm-note").textContent="Listo en la demo. En la versión real sale por WhatsApp Business y aquí ves cuántos lo leyeron y cuántos compraron.";
@@ -994,17 +1036,19 @@ $("ev-send").onclick=()=>{const r=calcEv();evReq.unshift({name:`${$("ev-type").v
 
 /* month */
 function renderMonth(){
-  $("feature").innerHTML=month.on?`<div class="stage"><div class="duo"><div class="lift">${pint(month.a)}</div><div class="lift">${pint(month.b)}</div></div></div>
+  $("feature").innerHTML=month.on?`${month.img?`<div class="stage ph" style="background-image:url(${month.img})"></div>`:`<div class="stage"><div class="duo"><div class="lift">${pint(month.a)}</div><div class="lift">${pint(month.b)}</div></div></div>`}
     <div class="fbody"><span class="hand">Edición del mes · hasta el ${fmtShort(month.until)}</span><h2>${esc(month.title)}</h2><p>${esc(month.desc)}</p><div class="fbuy"><div class="row"><span style="font-weight:700">${byK(month.a).n} + ${byK(month.b).n}</span><span class="price tabular">${money(month.price)}</span></div><div id="m-ctl"></div></div></div>`
     :`<div class="fbody"><h2>Muy pronto</h2><p>El próximo sabor del mes se anuncia pronto. Mientras tanto, vota por el que quieres.</p></div>`;
   $("voteTitle").textContent=poll.q;const tot=poll.opts.reduce((a,b)=>a+b.v,0)||1;
   $("vote").innerHTML=!poll.on?'<p class="note">La votación está cerrada por ahora.</p>':poll.opts.map((o,i)=>{const p=Math.round(o.v/tot*100);return`<button class="vopt" type="button" data-vote="${i}" ${voted!==null?"disabled":""}><span class="bar" style="width:0" data-w="${voted!==null?p:0}"></span><span class="vtop"><span>${esc(o.n)}${voted===i?" · tu voto":""}</span><span class="tabular">${voted!==null?p+"%":""}</span></span>${o.s?`<small>${esc(o.s)}</small>`:""}</button>`}).join("")+`<p class="note">${voted!==null?`${tot} votos hasta ahora.`:"Toca una opción para votar."}</p>`;
   requestAnimationFrame(()=>document.querySelectorAll("#vote .bar").forEach(b=>b.style.width=b.dataset.w+"%"));renderPromo();renderCtl()}
+function imgPrev(){$("m-imgprev").innerHTML=month.img?`<span style="background-image:url(${month.img})"></span><button class="ghost" type="button" id="m-imgdel">Quitar foto</button>`:'<p class="note">Sin foto: se muestran las tarrinas ilustradas.</p>';const d=$("m-imgdel");if(d)d.onclick=()=>{month.img=null;$("m-img").value="";imgPrev();renderMonth()}}
+$("m-img").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{month.img=r.result;imgPrev();renderMonth();toast("Foto lista. Ya se ve en el sitio.")};r.readAsDataURL(f)});
 $("vote").addEventListener("click",e=>{const b=e.target.closest("[data-vote]");if(!b||voted!==null)return;voted=+b.dataset.vote;poll.opts[voted].v++;renderMonth();renderVEdit()});
 function fillEditor(){const opts=F.map(f=>`<option value="${f.k}">${f.n}</option>`).join("");$("m-a").innerHTML=opts;$("m-b").innerHTML=opts;
-  $("m-title").value=month.title;$("m-desc").value=month.desc;$("m-a").value=month.a;$("m-b").value=month.b;$("m-price").value=month.price;$("m-until").value=month.until;$("m-on").checked=month.on;$("v-q").value=poll.q;$("v-on").checked=poll.on;renderVEdit()}
+  $("m-title").value=month.title;$("m-desc").value=month.desc;$("m-a").value=month.a;$("m-b").value=month.b;$("m-price").value=month.price;$("m-until").value=month.until;$("m-on").checked=month.on;imgPrev();$("v-q").value=poll.q;$("v-on").checked=poll.on;renderVEdit()}
 function renderVEdit(){$("vedit").innerHTML=poll.opts.map((o,i)=>`<div class="edrow"><input value="${esc(o.n)}" data-vi="${i}" aria-label="Opción ${i+1}"><span style="display:flex;gap:6px;align-items:center"><span class="tagx tabular">${o.v} votos</span><button class="ghost" type="button" data-vdel="${i}">Quitar</button></span></div>`).join("")}
-function readMonth(){month={on:$("m-on").checked,title:$("m-title").value,desc:$("m-desc").value,a:$("m-a").value,b:$("m-b").value,price:+$("m-price").value||0,until:$("m-until").value||dayOff(20)};renderMonth()}
+function readMonth(){month={img:month.img,on:$("m-on").checked,title:$("m-title").value,desc:$("m-desc").value,a:$("m-a").value,b:$("m-b").value,price:+$("m-price").value||0,until:$("m-until").value||dayOff(20)};renderMonth()}
 $("mf").addEventListener("input",readMonth);$("mf").addEventListener("change",readMonth);
 $("v-q").addEventListener("input",e=>{poll.q=e.target.value;renderMonth()});$("v-on").addEventListener("change",e=>{poll.on=e.target.checked;renderMonth()});
 $("vedit").addEventListener("input",e=>{const i=e.target.dataset.vi;if(i==null)return;poll.opts[+i].n=e.target.value;renderMonth()});
@@ -1015,10 +1059,10 @@ $("v-reset").onclick=()=>{poll.opts.forEach(o=>o.v=0);voted=null;renderVEdit();r
 
 /* ======================= routing ======================= */
 let view="site";
-function renderAll(){if(view==="panel")renderPanel();if(view==="driver")renderDriver();if(view==="site"&&!$("s-seguimiento").hidden)renderTrack();$("n-seguimiento").hidden=!orders.some(x=>x.web);$("trkDot").hidden=!orders.some(x=>x.web&&x.st!=="entregado")}
+function renderAll(){if(view==="panel"||view==="admin")renderPanel();if(view==="driver")renderDriver();if(view==="site"&&!$("s-seguimiento").hidden)renderTrack();$("n-seguimiento").hidden=!orders.some(x=>x.web);$("trkDot").hidden=!orders.some(x=>x.web&&x.st!=="entregado")}
 function route(){
-  const h=location.hash.slice(1);view=h==="panel"?"panel":h==="repartidor"?"driver":"site";
-  $("v-site").hidden=view!=="site";$("v-panel").hidden=view!=="panel";$("v-driver").hidden=view!=="driver";
+  const h=location.hash.slice(1);view=h==="panel"?"panel":h==="repartidor"?"driver":h==="admin"?"admin":"site";
+  $("v-site").hidden=view!=="site";$("v-panel").hidden=view!=="panel";$("v-driver").hidden=view!=="driver";$("v-admin").hidden=view!=="admin";$("t-admin").setAttribute("aria-current",view==="admin"?"page":"false");
   $("t-site").setAttribute("aria-current",view==="site"?"page":"false");$("t-panel").setAttribute("aria-current",view==="panel"?"page":"false");$("t-driver").setAttribute("aria-current",view==="driver"?"page":"false");
   if(view!=="site")closeDrawer();
   if(view==="site"){const tab=["eventos","mes","seguimiento"].includes(h)?h:"pedir";["pedir","eventos","mes","seguimiento"].forEach(t=>{$("s-"+t).hidden=t!==tab;const n=$("n-"+t);if(n)n.setAttribute("aria-current",t===tab?"page":"false")});
@@ -1026,7 +1070,7 @@ function route(){
     if(h==="sabores"){renderAll();$("sabores").scrollIntoView();return}}
   renderAll();scrollTo(0,0)}
 addEventListener("hashchange",route);
-renderWhere();renderGrid();renderMonth();calcEv();fillEditor();route();
+renderWhere();renderGrid();renderMonth();calcEv();fillEditor();setFuel("extra");route();
 </script>
 
 </body>
