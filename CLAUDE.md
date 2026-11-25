@@ -45,7 +45,7 @@ Este archivo guarda lo decidido en la conversación con el usuario, para retomar
 
 ## Qué tiene `index.html`
 Tres vistas que comparten los mismos datos: **Cliente** (`#pedir`), **Repartidor** (`#repartidor`) y **Panel** (`#panel`).
-- **Cliente:** vista simplificada a pedido del usuario: poco texto y sin pestañas. Arriba solo el logo y "Tu pedido"; "Mi pedido" aparece después de hacer un pedido. Eventos y "Para mi negocio" son tarjetas pequeñas debajo de los sabores. Texto del inicio: "hechos por Cate y Lili. Pide aquí y llegamos a la puerta de tu casa". Las dos son dueñas; en la web siempre van juntas.
+- **Cliente:** vista simplificada a pedido del usuario: poco texto y sin pestañas. Arriba solo el logo y "Tu pedido"; "Mi pedido" aparece después de hacer un pedido. Texto del inicio: "hechos por Cate y Lili. Pide aquí y llegamos a la puerta de tu casa". Las dos son dueñas; en la web siempre van juntas.
   - Catálogo con foto de cada sabor y la tarrina o vasito ilustrado (SVG), con selector "½ litro | Vasito".
   - Modo "Para mi negocio": precio mayorista que se cotiza por WhatsApp; mínimo 10 tarrinas.
   - Checkout solo delivery: día, horario, pago y "¿Dónde te lo llevamos?": ubicación actual o pin en un mapa (Leaflet + OpenStreetMap, dentro de la página); si no, "¿En qué zona vives?". Las zonas son donde vive el cliente, no puntos de despacho.
@@ -80,7 +80,8 @@ Tres vistas que comparten los mismos datos: **Cliente** (`#pedir`), **Repartidor
    - Dirección exacta de la planta (para la ruta).
    - Costo por tarrina y capacidad de las máquinas.
 3. **Pedirles:** logo en archivo y fotos propias de cada sabor, para reemplazar las de Pexels.
-4. **Versión real:** base de datos y cuentas, WhatsApp Business API, Google Maps (ubicación al pedir y rutas reales), pagos (Payphone o Kushki), dominio (voglio.ec).
+4. **Versión real (gratis):** Supabase (base de datos y cuentas) + GitHub Pages + dominio voglio.ec (comprobar si está libre en nic.ec; registrarlo a nombre de Voglio). WhatsApp con un toque, sin API. Pagos en efectivo o transferencia. Plan técnico: https://claude.ai/artifact/6n3i9Cz1JkeCSuMUVw43rd · Propuesta: https://claude.ai/artifact/LWNj57KMfRsrxP2ubFhWuW
+5. **Tarea semanal de gasolina:** todos los lunes 13:23 (hora de Ecuador) actualiza el objeto `FUEL` y lo sube a `main`. La primera corrida es el 30 nov; revisar que funcione.
 
 ## Notas técnicas
 - **Entorno:** la red permite unsplash.com, images.unsplash.com e images.pexels.com.
