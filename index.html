@@ -85,6 +85,7 @@ label{font-size:13px;font-weight:700;display:grid;gap:5px}
 .photo{width:44px;height:44px;border-radius:12px;background-size:cover;background-position:center;flex:none}
 
 .demobar{background:#151515;color:#E9DDD6;font-size:13px}
+@media (max-width:600px){.demobar .wrap > span{display:none}.demobar .wrap{justify-content:center}}
 .demobar .wrap{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-block:6px;flex-wrap:wrap}
 .views{display:flex;gap:2px;background:rgba(255,255,255,.08);padding:2px;border-radius:8px}
 .views a{text-decoration:none;padding:3px 10px;border-radius:6px;font-weight:700;color:#BFB3AC}
@@ -166,6 +167,12 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .fbuy{display:grid;gap:10px;margin-top:auto;padding-top:8px}
 .fbuy .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .price{font-size:22px;font-weight:900}
+.evcards{display:grid;gap:12px}
+.evc{display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center;border:1px solid var(--line);border-left:4px solid var(--c);border-radius:14px;padding:14px 16px;background:var(--surface)}
+.evc b{font-size:15px;font-weight:800}
+.evc .facts{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:4px}
+.evc .acts{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
+@media (max-width:620px){.evc{grid-template-columns:1fr}.evc .acts{justify-content:flex-start}}
 .quick{display:flex;gap:8px;flex-wrap:wrap}
 .quick a,.quick button{border:2px solid var(--hero-ink);background:transparent;color:var(--hero-ink);border-radius:999px;padding:7px 14px;font-weight:800;font-size:14px;text-decoration:none}
 .quick a:hover,.quick button:hover{background:var(--hero-ink);color:var(--hero)}
@@ -323,6 +330,9 @@ footer.foot .wordmark{font-size:40px}
 .ocard b{font-size:14px;font-weight:800}
 .ocard .it{color:var(--muted)}
 .ocard .row{display:flex;justify-content:space-between;gap:6px;align-items:center;flex-wrap:wrap}
+.urgbtn{border:1px dashed var(--line);background:transparent;color:var(--muted);font-size:11px;font-weight:800;padding:2px 8px;border-radius:6px}
+.urgbtn:hover{border-color:var(--bad);color:var(--bad)}
+.urgbtn.on{background:var(--bad);border:1px solid var(--bad);color:#fff}
 .ghost{border:1px solid var(--line);background:var(--surface);padding:5px 10px;border-radius:9px;font-weight:700;font-size:13px;text-decoration:none;color:var(--ink)}
 .ghost:hover{border-color:var(--ink)}
 .ghost.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
@@ -577,8 +587,7 @@ svg.leaflet-image-layer.leaflet-interactive path {pointer-events: visiblePainted
       <h1>Helado<br><span>y punto.</span></h1>
       <p class="scribble">Hecho x amantes del gelato</p>
       <p class="lead">Siete sabores en tarrina de ½ litro, hechos por Cate y Lili. Pide aquí y llegamos a la puerta de tu casa.</p>
-      <div class="herocta"><a class="btn primary" href="#sabores">Pedir ahora</a></div>
-      <div class="quick"><a href="#eventos">🎉 Para un evento</a><button type="button" data-m="negocio" id="bizBtn">🏪 Para mi negocio</button></div>
+      <div class="quick"><a href="#eventos">Para un evento</a><button type="button" data-m="negocio" id="bizBtn">Para mi negocio</button></div>
     </div>
     <div class="arch">
       <div class="frame"><img src="img/hero.jpg" alt="Tarrinas Voglio de chocolate, dulce de leche, menta con chocochips, pistacho, avellana y vainilla apiladas en pirámide"></div>
@@ -796,7 +805,7 @@ svg.leaflet-image-layer.leaflet-interactive path {pointer-events: visiblePainted
         <label for="m-until">Disponible hasta<input id="m-until" type="date"></label>
       </div>
       <p class="info" id="m-save"></p>
-      <label for="m-img">Foto del helado<input id="m-img" type="file" accept="image/*"></label>
+      <div style="display:grid;gap:6px"><span style="font-size:13px;font-weight:700">Foto del helado</span><label for="m-img" class="btn quiet sm" style="justify-self:start;display:inline-flex;cursor:pointer">Subir foto<input id="m-img" type="file" accept="image/*" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none"></label></div>
       <div class="imgprev" id="m-imgprev"></div>
       <p class="note">Los cambios se ven al instante en el sitio.</p>
     </form>
@@ -809,7 +818,15 @@ svg.leaflet-image-layer.leaflet-interactive path {pointer-events: visiblePainted
     </div>
   </div>
 
-  <div id="p-eventos" hidden class="card"><h2>Cotizaciones de eventos</h2><div class="list" id="evlist"></div></div>
+  <div id="p-eventos" hidden style="display:grid;gap:20px">
+    <div class="kpis">
+      <div class="kpi"><span>Nuevas</span><b class="tabular" id="e-new">0</b><small>por responder</small></div>
+      <div class="kpi"><span>Cotizadas</span><b class="tabular" id="e-sent">0</b><small>esperando respuesta</small></div>
+      <div class="kpi"><span>Confirmadas</span><b class="tabular" id="e-ok">0</b><small id="e-oks"></small></div>
+      <div class="kpi"><span>Valor por cerrar</span><b class="tabular" id="e-val">$0</b><small>nuevas y cotizadas</small></div>
+    </div>
+    <div class="card"><div class="cardhead"><h2>Cotizaciones de eventos</h2><span class="note">Llegan desde la calculadora del sitio.</span></div><div class="evcards" id="evlist"></div></div>
+  </div>
 </div>
 </div>
 <div id="v-admin" hidden>
@@ -1059,7 +1076,7 @@ let geo=null,geoBusy=false;
 function nearestSector(lat,lng){let best=null,bd=1e9;for(const[n,[a,b]]of Object.entries(SECTORS)){const d=hav({lat,lng},{lat:a,lng:b});if(d<bd){bd=d;best=n}}return[best,bd]}
 function renderGeo(){const box=$("c-geobox");if(!box)return;$("c-sectorlbl").hidden=!!(geo&&geo.km<=25);
   if(geo){box.innerHTML=`<div class="info" style="display:grid;gap:8px"><b id="c-geotitle"></b><span class="note" id="c-geotxt"></span><div class="pickmap" id="c-map"></div><span style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center"><span class="note">Mueve el pin o toca el mapa donde está tu casa.</span><button class="ghost" type="button" id="c-geoclear">Quitar ubicación</button></span></div>`;$("c-geoclear").onclick=()=>{geo=null;renderGeo()};geoText();initMap();return}
-  box.innerHTML=`<button class="btn azul block" type="button" id="c-geo" ${geoBusy?"disabled":""}>${geoBusy?"Buscando tu ubicación…":"📍 Usar mi ubicación actual"}</button><button class="btn quiet block" type="button" id="c-geopin" style="margin-top:8px">Marcar mi casa en el mapa</button><p class="note" id="c-geomsg" style="text-align:center;margin-top:6px">Así el repartidor llega directo a tu puerta. Si prefieres, elige tu zona abajo.</p>`;
+  box.innerHTML=`<button class="btn azul block" type="button" id="c-geo" ${geoBusy?"disabled":""}>${geoBusy?"Buscando tu ubicación…":"Usar mi ubicación actual"}</button><button class="btn quiet block" type="button" id="c-geopin" style="margin-top:8px">Marcar mi casa en el mapa</button><p class="note" id="c-geomsg" style="text-align:center;margin-top:6px">Así el repartidor llega directo a tu puerta. Si prefieres, elige tu zona abajo.</p>`;
   $("c-geo").onclick=askGeo;$("c-geopin").onclick=()=>{const[a,b]=SECTORS[$("c-sector").value]||[-2.17,-79.9];setGeo(a,b,true);renderGeo()}}
 function setGeo(lat,lng,manual){const[sector,km]=nearestSector(lat,lng);geo={lat,lng,sector,km,manual};if($("c-sector")&&km<=25)$("c-sector").value=sector}
 function geoText(){const t=$("c-geotitle");if(!t)return;const far=geo.km>25;$("c-sectorlbl").hidden=!far;t.textContent=far?"Parece que ese punto está fuera de la zona de reparto":geo.manual?"Marca el punto exacto de tu casa":"✓ Tu ubicación quedó guardada";t.parentElement.classList.toggle("warn",far);
@@ -1151,7 +1168,12 @@ let ptab="hoy";
 const WEEKS=["7 oct","14 oct","21 oct","28 oct","4 nov","11 nov","18 nov","Esta semana"];
 const W_CASA=[310,290,340,360,330,410,395,0],W_NEG=[180,180,260,260,300,300,420,0];
 const TOP30={pistacho:96,chocolate:88,vainilla:71,dulcedeleche:64,chicle:58,avellana:47,menta:39};
-let evReq=[{name:"Boda · familia Peña",phone:"099 876 5432",date:dayOff(18),inv:120,tar:40,srv:true,st:"Cotización enviada"}];
+let evReq=[{name:"Cumpleaños · Martina Cevallos",phone:"098 222 7711",date:dayOff(9),inv:40,tar:14,srv:false,st:"Nueva",t:"hace 2 horas"},
+  {name:"Boda · familia Peña",phone:"099 876 5432",date:dayOff(18),inv:120,tar:40,srv:true,st:"Cotización enviada",t:"ayer"},
+  {name:"Evento de empresa · Banco del Litoral",phone:"04 600 1200",date:dayOff(25),inv:200,tar:66,srv:true,st:"Confirmado",t:"hace 4 días"}];
+const EVST={"Nueva":"var(--azul)","Cotización enviada":"var(--warn)","Confirmado":"var(--ok)"};
+const evPrice=e=>Math.round(e.tar*AVG);
+const evMsg=e=>`Hola ${e.name.split(" · ")[1]||""}, gracias por escribir a Voglio. Para ${e.inv} invitados te recomendamos ${e.tar} tarrinas de ½ L (${String(e.tar/2).replace(".",",")} litros) en 3 o 4 sabores: $${evPrice(e)}${e.srv?" más el carrito con persona que sirve":""}. ¿Te reservamos la fecha del ${fmtShort(e.date)}?`;
 function renderPanel(){
   plan();
   $("today").textContent="Hoy, "+new Date().toLocaleDateString("es-EC",{weekday:"long",day:"numeric",month:"long"});
@@ -1162,9 +1184,9 @@ function renderPanel(){
   $("k-week").textContent="$"+(W_CASA[7]+W_NEG[7]);$("k-weeks").textContent=`$${W_CASA[7]} casa · $${W_NEG[7]} negocios`;
   const rated=orders.filter(o=>o.reviewSent),avg=(4.8*41+rated.reduce((a,o)=>a+o.rating,0))/(41+rated.length);$("k-rate").textContent=avg.toFixed(1)+" ★";$("k-rates").textContent=`${41+rated.length} calificaciones`;
   $("board").innerHTML=ST.map(s=>{const list=todays.filter(o=>o.st===s.k);return`<div class="col"><h3><span>${s.t}</span><span class="tabular">${list.length}</span></h3>${list.map(o=>{
-    const urg=s.k==="nuevo"||s.k==="prep"||s.k==="camino"?`<button class="ghost${o.urgent?" dark":""}" type="button" data-urg="${o.id}" aria-pressed="${!!o.urgent}">${o.urgent?"Urgente ✓":"Marcar urgente"}</button>`:"";
+    const urg=s.k!=="entregado"?`<button class="urgbtn${o.urgent?" on":""}" type="button" data-urg="${o.id}" aria-pressed="${!!o.urgent}" title="${o.urgent?"Quitar urgente":"Marcar como urgente: va primero en la ruta"}">${o.urgent?"Urgente":"¿Urgente?"}</button>`:"";
     const act=s.k==="nuevo"?`<button class="ghost dark" type="button" data-go="${o.id}">Confirmar</button>`:s.k==="prep"?`<span class="tagx">${routeStarted?"Sale en el próximo viaje":"Listo para el reparto"}</span>`:s.k==="camino"?`<span class="tagx">Llega ${o.eta?hhmm(o.eta):""}</span>`:`<span class="tagx">${o.paid?esc(o.paid):""}${o.rating?" · "+o.rating+" ★":""}</span>`;
-    return`<div class="ocard${o.id===lastId?" flash":""}" style="--st:${s.c}"><div class="row"><b>${esc(o.name.split(" · ")[0])}</b><span class="tagx">${o.id}</span></div><span class="it">${esc(itemsTxt(o))}</span><span class="it">${esc(o.sector)}${o.geo?" · 📍 ubicación exacta":""} · ${o.tipo==="negocio"?"mayorista":money(totOf(o))}</span><div class="row">${act}<a class="ghost" href="${wa(o.phone)}" target="_blank" rel="noopener">WhatsApp</a></div>${urg?`<div class="row">${urg}</div>`:""}</div>`}).join("")||'<span class="note" style="padding:4px">—</span>'}</div>`}).join("");
+    return`<div class="ocard${o.id===lastId?" flash":""}" style="--st:${s.c}"><div class="row"><b>${esc(o.name.split(" · ")[0])}</b><span class="tagx">${o.id}</span></div>${urg?`<div>${urg}</div>`:""}<span class="it">${esc(itemsTxt(o))}</span><span class="it">${esc(o.sector)}${o.geo?" · ubicación exacta":""} · ${o.tipo==="negocio"?"mayorista":money(totOf(o))}</span><div class="row">${act}<a class="ghost" href="${wa(o.phone)}" target="_blank" rel="noopener">WhatsApp</a></div></div>`}).join("")||'<span class="note" style="padding:4px">—</span>'}</div>`}).join("");
   $("upcoming").innerHTML=orders.filter(o=>o.date>TODAY).sort((a,b)=>a.date.localeCompare(b.date)).map(o=>`<div><span><b>${esc(o.name)}</b><br><small>${fmtDate(o.date)} · ${esc(itemsTxt(o))}${o.failed?" · reprogramado":""}</small></span><span class="pill" style="--c:${stOf(o.st).c}"><i></i>${stOf(o.st).t}</span></div>`).join("")||'<p class="note">Sin pedidos para los próximos días.</p>';
   const need={};F.forEach(f=>need[f.k]=0);orders.filter(o=>o.st==="nuevo"||o.st==="prep").forEach(o=>{for(const k in o.items){const q=o.items[k];if(k==="mes"){need[month.a]+=q;need[month.b]+=q}else if(need[base(k)]!=null)need[base(k)]+=q}});
   const tot=Object.values(need).reduce((a,b)=>a+b,0),mx=Math.max(1,...Object.values(need));
@@ -1194,7 +1216,11 @@ function renderPanel(){
   $("lists").innerHTML=`<div><span>Aceptaron recibir promociones</span><b class="tabular">${212+orders.filter(o=>o.promo).length}</b></div><div><span>Nuevos este mes</span><b class="tabular">+37</b></div><div><span>Compraron después de la última promo</span><b class="tabular">24 (11%)</b></div>`;
   $("reviews").innerHTML=reviews.map(r=>`<div style="display:grid;gap:2px;justify-content:stretch"><span style="display:flex;justify-content:space-between;gap:8px"><b>${esc(r.name)}</b><span style="color:#E2A93B;letter-spacing:1px">${"★".repeat(r.rating)}<span style="color:var(--line)">${"★".repeat(5-r.rating)}</span></span></span>${r.comment?`<small>“${esc(r.comment)}”</small>`:""}<small>${r.t}</small></div>`).join("");$("rvAvg").textContent=$("k-rate").textContent;
   promoPrev();
-  $("evlist").innerHTML=evReq.map((e,i)=>`<div style="flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px"><span><b>${esc(e.name)}</b><br><small>${fmtDate(e.date)} · ${e.inv} invitados · ${e.tar} tarrinas${e.srv?" · con carrito":""}</small></span><span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span class="tagx">${e.st}</span><a class="ghost" href="${wa(e.phone)}" target="_blank" rel="noopener">WhatsApp</a>${e.st==="Nueva"?`<button class="ghost" type="button" data-ev="${i}">Marcar cotizado</button>`:""}</span></div>`).join("")}
+  const cnt=k=>evReq.filter(e=>e.st===k);$("e-new").textContent=cnt("Nueva").length;$("e-sent").textContent=cnt("Cotización enviada").length;$("e-ok").textContent=cnt("Confirmado").length;
+  $("e-oks").textContent="$"+cnt("Confirmado").reduce((a,e)=>a+evPrice(e),0)+" asegurados";$("e-val").textContent="$"+[...cnt("Nueva"),...cnt("Cotización enviada")].reduce((a,e)=>a+evPrice(e),0);
+  $("evlist").innerHTML=evReq.map((e,i)=>`<div class="evc" style="--c:${EVST[e.st]}"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b>${esc(e.name)}</b><span class="pill" style="--c:${EVST[e.st]}"><i></i>${e.st}</span></div>
+      <div class="facts"><span>${fmtDate(e.date)}</span><span>${e.inv} invitados</span><span>${e.tar} tarrinas</span><span>aprox. <b style="font-size:13px;color:var(--ink)">$${evPrice(e)}</b></span>${e.srv?"<span>con carrito</span>":""}<span>pidió ${e.t||"ahora"}</span></div></div>
+    <div class="acts"><a class="ghost${e.st==="Nueva"?" dark":""}" href="${wa(e.phone)}?text=${encodeURIComponent(evMsg(e))}" target="_blank" rel="noopener">${e.st==="Nueva"?"Enviar cotización":"WhatsApp"}</a>${e.st==="Nueva"?`<button class="ghost" type="button" data-ev="${i}" data-to="Cotización enviada">Ya la envié</button>`:e.st==="Cotización enviada"?`<button class="ghost" type="button" data-ev="${i}" data-to="Confirmado">Confirmar evento</button>`:""}</div></div>`).join("")||'<p class="note">Todavía no hay cotizaciones.</p>'}
 const ARRIVAL=["V-1043","V-1041","V-1044","V-1039","V-1042","V-1040"];
 function routeSaving(){const kmg=+$("r-kmg").value||35,gal=+$("r-gal").value||2.8,cost=d=>d/kmg*gal,arrOrd=ROUTE.slice().sort((a,b)=>{const i=ARRIVAL.indexOf(a.id),j=ARRIVAL.indexOf(b.id);return(i<0?99:i)-(j<0?99:j)}),byId=tourLen(arrOrd),opt=tourLen(optimize(ROUTE)),cur=opt;
   $("saving").innerHTML=`<div><span class="note">Recorrido</span><b class="tabular">${cur.toFixed(1)} km</b></div><div><span class="note">Gasolina hoy</span><b class="tabular">${money(cost(cur))}</b></div><div class="good"><span class="note">Ahorro al mes</span><b class="tabular">${money(Math.max(0,cost(byId-opt))*24)}</b></div>`;
@@ -1204,7 +1230,7 @@ $("board").addEventListener("click",e=>{const u=e.target.closest("[data-urg]");i
   const b=e.target.closest("[data-go]");if(!b)return;const o=orders.find(x=>x.id===b.dataset.go);setStatus(o,"prep");
   if(routeStarted&&o.date===TODAY){o.st="camino";addEvent(o,"camino");sendMsg("salio",o,`${firstName(o)}, tu pedido ${o.id} va en camino. Síguelo aquí: voglio.ec/s/${o.id}`);renderAll()}toast(`${o.id} confirmado. ${firstName(o)} recibió su WhatsApp.`)});
 $("autos").addEventListener("change",e=>{const k=e.target.dataset.auto;if(k){AUTO[k]=e.target.checked;toast(e.target.checked?"Automatización activada":"Automatización pausada")}});
-$("evlist").addEventListener("click",e=>{const b=e.target.closest("[data-ev]");if(!b)return;evReq[+b.dataset.ev].st="Cotización enviada";renderPanel()});
+$("evlist").addEventListener("click",e=>{const b=e.target.closest("[data-ev]");if(!b)return;const ev=evReq[+b.dataset.ev];ev.st=b.dataset.to;if(ev.st==="Confirmado")log(`Evento confirmado: <b>${esc(ev.name)}</b> · ${ev.tar} tarrinas`,"ok");renderPanel();toast(ev.st==="Confirmado"?"Evento confirmado":"Marcada como cotizada")});
 $("ptabs").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;ptab=b.dataset.p;$("ptabs").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));
   ["hoy","vivo","numeros","clientes","mes","eventos"].forEach(p=>$("p-"+p).hidden=p!==ptab);renderPanel()});
 function drawWeekly(){
@@ -1237,7 +1263,7 @@ function calcEv(){const n=+$("ev-n").value,tar=Math.ceil(n*por*1.1/.5),srv=$("ev
 $("ev-n").addEventListener("input",calcEv);$("ev-srv").addEventListener("change",calcEv);
 $("ev-por").addEventListener("click",e=>{const b=e.target.closest("[data-v]");if(!b)return;por=+b.dataset.v;$("ev-por").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));calcEv()});
 $("ev-date").value=dayOff(21);
-$("ev-send").onclick=()=>{const r=calcEv();evReq.unshift({name:`${$("ev-type").value} · ${$("ev-name").value}`,phone:$("ev-phone").value,date:$("ev-date").value,inv:r.n,tar:r.tar,srv:r.srv,st:"Nueva"});log(`Nueva cotización de evento: ${esc($("ev-type").value)} para ${r.n} invitados`);
+$("ev-send").onclick=()=>{const r=calcEv();evReq.unshift({name:`${$("ev-type").value} · ${$("ev-name").value}`,phone:$("ev-phone").value,date:$("ev-date").value,inv:r.n,tar:r.tar,srv:r.srv,st:"Nueva",t:"ahora"});log(`Nueva cotización de evento: ${esc($("ev-type").value)} para ${r.n} invitados`);
   $("ev-ok").hidden=false;$("ev-ok").innerHTML=`Solicitud enviada. Voglio te escribe por WhatsApp con la cotización. <a href="#panel"><b>Ver cómo le llega a Voglio</b></a>`;renderPanel()};
 
 /* month */

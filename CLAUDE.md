@@ -49,7 +49,8 @@ Tres vistas que comparten los mismos datos: **Cliente** (`#pedir`), **Repartidor
   - Catálogo con foto de cada sabor y la tarrina o vasito ilustrado (SVG), con selector "½ litro | Vasito".
   - Modo "Para mi negocio": precio mayorista que se cotiza por WhatsApp; mínimo 10 tarrinas.
   - Checkout solo delivery: día, horario, pago y "¿Dónde te lo llevamos?": ubicación actual o pin en un mapa (Leaflet + OpenStreetMap, dentro de la página); si no, "¿En qué zona vives?". Las zonas son donde vive el cliente, no puntos de despacho.
-  - "Para un evento" y "Para mi negocio" son botones en el inicio, debajo de "Pedir ahora", para no bajar en el celular.
+  - "Para un evento" y "Para mi negocio" son botones en el inicio (sin emojis, sin botón "Pedir ahora"), para no bajar en el celular.
+  - Panel > Eventos: contadores y tarjetas por estado (Nueva, Cotización enviada, Confirmado); "Enviar cotización" abre WhatsApp con el mensaje ya escrito.
   - **Eventos:** calculadora de tarrinas según invitados.
   - **Combo para compartir** (antes "Sabor del mes"): dos sabores más baratos juntos. No se dice "promoción": se muestra el precio normal tachado y "Ahorras $X". Precio de ejemplo $13.99 (por confirmar). Tiene votación.
   - **Mi pedido:** solo el estado (Recibido, En preparación, En camino, Entregado) más calificación con estrellas y opinión. **Sin mapa ni ubicación del repartidor**; el usuario lo pidió así.
