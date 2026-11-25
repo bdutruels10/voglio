@@ -333,6 +333,7 @@ footer.foot .wordmark{font-size:40px}
 .urgbtn{border:1px dashed var(--line);background:transparent;color:var(--muted);font-size:11px;font-weight:800;padding:2px 8px;border-radius:6px}
 .urgbtn:hover{border-color:var(--bad);color:var(--bad)}
 .urgbtn.on{background:var(--bad);border:1px solid var(--bad);color:#fff}
+.sentok{font-size:13px;font-weight:800;color:var(--ok);white-space:nowrap}
 .ghost{border:1px solid var(--line);background:var(--surface);padding:5px 10px;border-radius:9px;font-weight:700;font-size:13px;text-decoration:none;color:var(--ink)}
 .ghost:hover{border-color:var(--ink)}
 .ghost.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
@@ -777,12 +778,13 @@ svg.leaflet-image-layer.leaflet-interactive path {pointer-events: visiblePainted
 
   <div id="p-clientes" hidden class="pcols">
     <div class="card">
-      <h2>Enviar promoción</h2>
+      <div class="cardhead"><h2>Escribir a clientes</h2><span class="tagx tabular" id="pm-count"></span></div>
+      <p class="note">Elige a quién escribir y toca "Enviar" en cada cliente: se abre WhatsApp con el mensaje listo y solo lo envías. Sin costo.</p>
       <label for="pm-text">Mensaje<textarea id="pm-text" rows="3">Llegó "Chisme entre amigas": Vainilla + Pistacho juntos salen más baratos. Pide en voglio.ec</textarea></label>
       <label for="pm-to">Para<select id="pm-to"><option value="todos">Todos los contactos</option><option value="casa">Solo clientes de casa</option><option value="negocio">Solo negocios</option><option value="pista">Les gusta Pistacho o Avellana</option><option value="dormidos">No piden hace más de 30 días</option></select></label>
-      <div><p class="note" style="margin-bottom:6px">Vista previa en WhatsApp</p><div class="bubble" id="pm-prev"></div></div>
-      <button class="btn primary sm" id="pm-send" type="button" style="justify-self:start">Programar envío</button>
-      <p class="note" id="pm-note">En la versión real sale por WhatsApp Business, solo a quienes aceptaron.</p>
+      <div><p class="note" style="margin-bottom:6px">Así le llega a cada cliente</p><div class="bubble" id="pm-prev"></div></div>
+      <div class="list" id="pm-list"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="ghost" id="pm-copy" type="button">Copiar mensaje</button><span class="note" id="pm-note">Para muchos a la vez: pégalo en una lista de difusión de WhatsApp Business (hasta 256 contactos, gratis).</span></div>
     </div>
     <div class="pcol">
       <div class="card"><div class="cardhead"><h2>Opiniones</h2><span class="tagx" id="rvAvg"></span></div><div class="list" id="reviews"></div></div>
@@ -835,17 +837,17 @@ svg.leaflet-image-layer.leaflet-interactive path {pointer-events: visiblePainted
   <div class="kpis">
     <div class="kpi"><span>Plan de mantenimiento</span><b class="tabular">$50</b><small>al mes · próximo cobro 1 dic</small></div>
     <div class="kpi"><span>Sitio</span><b style="font-size:22px">En línea</b><small>sin caídas este mes</small></div>
-    <div class="kpi"><span>Mensajes enviados</span><b class="tabular" id="a-msgs">0</b><small>hoy por WhatsApp</small></div>
+    <div class="kpi"><span>Mensajes</span><b class="tabular" id="a-msgs">0</b><small>preparados hoy para WhatsApp</small></div>
     <div class="kpi"><span>Combustible</span><b style="font-size:22px">Al día</b><small id="a-fuel"></small></div>
   </div>
   <div id="p-auto" class="pcols">
     <div class="card">
-      <h2>Lo que la página hace sola</h2>
-      <p class="note">Prende o apaga cada automatización. Las que mandan mensajes usan WhatsApp Business.</p>
+      <h2>Mensajes y tareas automáticas</h2>
+      <p class="note">La página prepara cada mensaje y Voglio lo envía con un toque desde el panel (sin costo). Prende o apaga cada uno.</p>
       <div id="autos"></div>
     </div>
     <div class="pcol">
-      <div class="card"><div class="cardhead"><h2>Mensajes automáticos de hoy</h2><span class="tagx tabular" id="msgCount"></span></div><div class="feed" id="msgs"></div></div>
+      <div class="card"><div class="cardhead"><h2>Mensajes preparados hoy</h2><span class="tagx tabular" id="msgCount"></span></div><div class="feed" id="msgs"></div></div>
       <div class="card">
         <h2>Reglas de pedido</h2>
         <label for="cutoff">Hora límite para entregar el mismo día<input id="cutoff" type="time" value="23:59"></label>
@@ -1174,6 +1176,7 @@ let evReq=[{name:"Cumpleaños · Martina Cevallos",phone:"098 222 7711",date:day
 const EVST={"Nueva":"var(--azul)","Cotización enviada":"var(--warn)","Confirmado":"var(--ok)"};
 const evPrice=e=>Math.round(e.tar*AVG);
 const evMsg=e=>`Hola ${e.name.split(" · ")[1]||""}, gracias por escribir a Voglio. Para ${e.inv} invitados te recomendamos ${e.tar} tarrinas de ½ L (${String(e.tar/2).replace(".",",")} litros) en 3 o 4 sabores: $${evPrice(e)}${e.srv?" más el carrito con persona que sirve":""}. ¿Te reservamos la fecha del ${fmtShort(e.date)}?`;
+const stMsg=o=>{const n=firstName(o);return{nuevo:`Hola ${n}, recibimos tu pedido ${o.id}. En un ratito te lo confirmamos.`,prep:`Hola ${n}, confirmamos tu pedido ${o.id}. Ya lo estamos preparando.`,camino:`${n}, tu pedido ${o.id} va en camino. Síguelo aquí: voglio.ec/s/${o.id}`,entregado:`¡Gracias ${n}! ¿Qué tal estuvo tu helado? Califícanos aquí: voglio.ec/s/${o.id}`}[o.st]};
 function renderPanel(){
   plan();
   $("today").textContent="Hoy, "+new Date().toLocaleDateString("es-EC",{weekday:"long",day:"numeric",month:"long"});
@@ -1186,7 +1189,7 @@ function renderPanel(){
   $("board").innerHTML=ST.map(s=>{const list=todays.filter(o=>o.st===s.k);return`<div class="col"><h3><span>${s.t}</span><span class="tabular">${list.length}</span></h3>${list.map(o=>{
     const urg=s.k!=="entregado"?`<button class="urgbtn${o.urgent?" on":""}" type="button" data-urg="${o.id}" aria-pressed="${!!o.urgent}" title="${o.urgent?"Quitar urgente":"Marcar como urgente: va primero en la ruta"}">${o.urgent?"Urgente":"¿Urgente?"}</button>`:"";
     const act=s.k==="nuevo"?`<button class="ghost dark" type="button" data-go="${o.id}">Confirmar</button>`:s.k==="prep"?`<span class="tagx">${routeStarted?"Sale en el próximo viaje":"Listo para el reparto"}</span>`:s.k==="camino"?`<span class="tagx">Llega ${o.eta?hhmm(o.eta):""}</span>`:`<span class="tagx">${o.paid?esc(o.paid):""}${o.rating?" · "+o.rating+" ★":""}</span>`;
-    return`<div class="ocard${o.id===lastId?" flash":""}" style="--st:${s.c}"><div class="row"><b>${esc(o.name.split(" · ")[0])}</b><span class="tagx">${o.id}</span></div>${urg?`<div>${urg}</div>`:""}<span class="it">${esc(itemsTxt(o))}</span><span class="it">${esc(o.sector)}${o.geo?" · ubicación exacta":""} · ${o.tipo==="negocio"?"mayorista":money(totOf(o))}</span><div class="row">${act}<a class="ghost" href="${wa(o.phone)}" target="_blank" rel="noopener">WhatsApp</a></div></div>`}).join("")||'<span class="note" style="padding:4px">—</span>'}</div>`}).join("");
+    return`<div class="ocard${o.id===lastId?" flash":""}" style="--st:${s.c}"><div class="row"><b>${esc(o.name.split(" · ")[0])}</b><span class="tagx">${o.id}</span></div>${urg?`<div>${urg}</div>`:""}<span class="it">${esc(itemsTxt(o))}</span><span class="it">${esc(o.sector)}${o.geo?" · ubicación exacta":""} · ${o.tipo==="negocio"?"mayorista":money(totOf(o))}</span><div class="row">${act}<a class="ghost" href="${wa(o.phone)}?text=${encodeURIComponent(stMsg(o))}" target="_blank" rel="noopener" title="Abre WhatsApp con el aviso listo">Avisar</a></div></div>`}).join("")||'<span class="note" style="padding:4px">—</span>'}</div>`}).join("");
   $("upcoming").innerHTML=orders.filter(o=>o.date>TODAY).sort((a,b)=>a.date.localeCompare(b.date)).map(o=>`<div><span><b>${esc(o.name)}</b><br><small>${fmtDate(o.date)} · ${esc(itemsTxt(o))}${o.failed?" · reprogramado":""}</small></span><span class="pill" style="--c:${stOf(o.st).c}"><i></i>${stOf(o.st).t}</span></div>`).join("")||'<p class="note">Sin pedidos para los próximos días.</p>';
   const need={};F.forEach(f=>need[f.k]=0);orders.filter(o=>o.st==="nuevo"||o.st==="prep").forEach(o=>{for(const k in o.items){const q=o.items[k];if(k==="mes"){need[month.a]+=q;need[month.b]+=q}else if(need[base(k)]!=null)need[base(k)]+=q}});
   const tot=Object.values(need).reduce((a,b)=>a+b,0),mx=Math.max(1,...Object.values(need));
@@ -1205,7 +1208,7 @@ function renderPanel(){
   $("feed").innerHTML=feed.map(f=>`<div class="${f.fresh?"new":""}"><time>${f.t}</time><span style="${f.cls==="bad"?"color:var(--bad)":f.cls==="ok"?"color:var(--ok)":""}">${f.txt}</span></div>`).join("")||'<p class="note">Aquí verás cada pedido, salida y entrega en el momento en que pasa. Prueba confirmar un pedido o abre la app del repartidor.</p>';feed.forEach(f=>f.fresh=false);
   $("autos").innerHTML=AUTOS.map(([k,t,d])=>`<div class="auto"><span><b>${t}</b><small>${d}</small></span><label class="sw"><input type="checkbox" data-auto="${k}" ${AUTO[k]?"checked":""} aria-label="${t}"><span></span></label></div>`).join("");
   $("msgs").innerHTML=msgs.map(m=>`<div><time>${m.t}</time><span><b>${esc(m.to)}</b><br><span class="msg">${esc(m.txt)}</span></span></div>`).join("")||'<p class="note">Todavía no se ha enviado nada hoy. Confirma un pedido o sal a repartir y mira cómo aparecen.</p>';
-  $("msgCount").textContent=msgs.length?msgs.length+" enviados":"";$("a-msgs").textContent=msgs.length;renderFuelAdmin();
+  $("msgCount").textContent=msgs.length?msgs.length+" preparados":"";$("a-msgs").textContent=msgs.length;renderFuelAdmin();
   const ms=W_CASA.slice(4).reduce((a,b)=>a+b,0)+W_NEG.slice(4).reduce((a,b)=>a+b,0);
   $("n-month").textContent="$"+ms.toLocaleString("es-EC");$("n-goal").textContent=`${Math.round(ms/4500*100)}% de la meta de $4.500`;
   const tmx=Math.max(...Object.values(TOP30));
@@ -1213,7 +1216,7 @@ function renderPanel(){
   capacity();margin();if(ptab==="numeros")drawWeekly();
   $("best").innerHTML=[["Andrés Malo","9 pedidos","Le gusta Avellana · $164 en total"],["Daniela Ortiz","7 pedidos","Pide los viernes · $121"],["Sofía Crespo","6 pedidos","No pide hace 34 días · recordatorio programado"]].map(r=>`<div><span><b>${r[0]}</b><br><small>${r[2]}</small></span><span class="tagx">${r[1]}</span></div>`).join("");
   $("bizlist").innerHTML=[["Del Portal (5 locales)","Reposición semanal automática · unas 90 tarrinas","Al día"],["Café Barranco","Cada semana · unas 12 tarrinas","Debe $186"],["Plaza Gourmet, Machala","Cada 15 días","Al día"]].map(r=>`<div><span><b>${r[0]}</b><br><small>${r[1]}</small></span><span class="tagx">${r[2]}</span></div>`).join("");
-  $("lists").innerHTML=`<div><span>Aceptaron recibir promociones</span><b class="tabular">${212+orders.filter(o=>o.promo).length}</b></div><div><span>Nuevos este mes</span><b class="tabular">+37</b></div><div><span>Compraron después de la última promo</span><b class="tabular">24 (11%)</b></div>`;
+  $("lists").innerHTML=`<div><span>Aceptaron recibir mensajes</span><b class="tabular">${212+orders.filter(o=>o.promo).length}</b></div><div><span>Nuevos este mes</span><b class="tabular">+37</b></div><div><span>Compraron después del último mensaje</span><b class="tabular">24 (11%)</b></div>`;
   $("reviews").innerHTML=reviews.map(r=>`<div style="display:grid;gap:2px;justify-content:stretch"><span style="display:flex;justify-content:space-between;gap:8px"><b>${esc(r.name)}</b><span style="color:#E2A93B;letter-spacing:1px">${"★".repeat(r.rating)}<span style="color:var(--line)">${"★".repeat(5-r.rating)}</span></span></span>${r.comment?`<small>“${esc(r.comment)}”</small>`:""}<small>${r.t}</small></div>`).join("");$("rvAvg").textContent=$("k-rate").textContent;
   promoPrev();
   const cnt=k=>evReq.filter(e=>e.st===k);$("e-new").textContent=cnt("Nueva").length;$("e-sent").textContent=cnt("Cotización enviada").length;$("e-ok").textContent=cnt("Confirmado").length;
@@ -1251,9 +1254,19 @@ const mg=f=>{const g=f.p-(COST[f.k]||0);return`${money(g)} <small>· ${Math.roun
 function margin(){if($("margin").dataset.ok)return;$("margin").dataset.ok=1;$("margin").innerHTML=`<div><small>Sabor · precio</small><small>Cuesta hacerla → ganancia</small></div>`+F.slice().sort((a,b)=>b.p-a.p).map(f=>`<div><span><b>${f.n}</b><br><small>${money(f.p)}${f.ask?" · precio por confirmar":""}</small></span><span style="display:flex;gap:10px;align-items:center"><input class="costin" type="number" min="0" step="0.1" value="${COST[f.k].toFixed(2)}" data-cost="${f.k}" aria-label="Costo de ${f.n}"><b id="mg-${f.k}" style="min-width:96px;text-align:right">${mg(f)}</b></span></div>`).join("")}
 $("margin").addEventListener("input",e=>{const k=e.target.dataset.cost;if(!k)return;COST[k]=+e.target.value||0;$("mg-"+k).innerHTML=mg(byK(k))});
 $("cap").addEventListener("input",capacity);
-function promoPrev(){$("pm-prev").textContent=$("pm-text").value||"Escribe tu mensaje";const n={todos:212+orders.filter(o=>o.promo).length,casa:184,negocio:28,pista:97,dormidos:41}[$("pm-to").value];$("pm-send").textContent=`Programar envío a ${n} contactos`}
+/* Clientes que aceptaron recibir mensajes (datos de ejemplo + los que piden en la web). */
+const CLIENTS=[["Andrés Malo","099 555 1212","casa","avellana",3],["Daniela Ortiz","098 111 9090","casa","chocolate",6],["Sofía Crespo","097 444 5566","casa","chicle",34],["Valentina Ruiz","096 222 3344","casa","vainilla",12],["Mateo Vázquez","099 432 1100","casa","dulcedeleche",2],["Carolina Mena","098 765 1010","casa","pistacho",41],["José Andrade","099 101 2020","casa","pistacho",9],["Gabriela Torres","096 303 4040","casa","menta",52],["Café Barranco","098 765 4321","negocio","pistacho",5],["Panadería La Espiga","04 222 3344","negocio","chocolate",38],["Del Portal (compras)","04 000 0000","negocio","pistacho",4]].map(([n,ph,t,f,d])=>({n,ph,t,f,d}));
+let pmSent=new Set();
+function pmClients(){const web=orders.filter(o=>o.web&&o.promo&&!CLIENTS.some(c=>c.n===o.name)).map(o=>({n:o.name,ph:o.phone,t:o.tipo,f:Object.keys(o.items).map(base).find(k=>byK(k))||"vainilla",d:0}));
+  const all=[...web,...CLIENTS],to=$("pm-to").value;
+  return all.filter(c=>to==="todos"||(to==="casa"&&c.t==="casa")||(to==="negocio"&&c.t==="negocio")||(to==="pista"&&(c.f==="pistacho"||c.f==="avellana"))||(to==="dormidos"&&c.d>30))}
+const pmMsg=c=>`¡Hola ${c.n.split(" ")[0]}! ${($("pm-text").value||"").trim()}`;
+function promoPrev(){const list=pmClients(),txt=$("pm-text").value.trim();$("pm-prev").textContent=txt?pmMsg(list[0]||{n:"Camila"}):"Escribe tu mensaje";
+  const sent=list.filter(c=>pmSent.has(c.n)).length;$("pm-count").textContent=`${sent} de ${list.length} enviados`;
+  $("pm-list").innerHTML=list.map(c=>`<div><span><b>${esc(c.n)}</b><br><small>${c.t==="negocio"?"Negocio":"Casa"} · le gusta ${byK(c.f).n}${c.d?` · pidió hace ${c.d} días`:" · pidió hoy"}</small></span>${pmSent.has(c.n)?`<span class="sentok">Enviado ✓</span>`:`<a class="ghost dark" href="${wa(c.ph)}?text=${encodeURIComponent(pmMsg(c))}" target="_blank" rel="noopener" data-pm="${esc(c.n)}">Enviar</a>`}</div>`).join("")||'<p class="note">Nadie en este grupo todavía.</p>'}
 $("pm-text").addEventListener("input",promoPrev);$("pm-to").addEventListener("change",promoPrev);
-$("pm-send").onclick=()=>$("pm-note").textContent="Listo en la demo. En la versión real sale por WhatsApp Business y aquí ves cuántos lo leyeron y cuántos compraron.";
+$("pm-list").addEventListener("click",e=>{const a=e.target.closest("[data-pm]");if(!a)return;pmSent.add(a.dataset.pm);setTimeout(promoPrev,150)});
+$("pm-copy").onclick=async()=>{try{await navigator.clipboard.writeText($("pm-text").value.trim());toast("Mensaje copiado. Pégalo en tu lista de difusión.")}catch(e){toast("No se pudo copiar. Selecciona el texto y cópialo.")}};
 
 /* events */
 let por=.15;const AVG=F.reduce((a,f)=>a+f.p,0)/F.length;

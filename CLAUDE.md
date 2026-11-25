@@ -64,7 +64,9 @@ Tres vistas que comparten los mismos datos: **Cliente** (`#pedir`), **Repartidor
   - Urgentes: Voglio marca un pedido como "urgente" y va primero en la ruta.
   - Ganancia por tarrina: costo distinto por sabor (valores de ejemplo; pedir los reales).
   - Gasolina: Extra/Ecopaís, Súper o Diésel con el precio oficial (objeto `FUEL` en `index.html`). El usuario quiere que se revisen cada semana.
-- **Administrador** (`#admin`): solo para el usuario, no para Voglio. Tiene lo automático (WhatsApp, hora límite, martes), el plan de mantenimiento mensual ($50 de ejemplo) y los precios de combustible. El usuario quiere cobrarles mantenimiento mensual por esto.
+- **WhatsApp sin costo (decidido 25 nov):** nada de WhatsApp API. El panel prepara cada mensaje y Voglio lo envía con un toque: "Avisar" en cada pedido y "Escribir a clientes" (eligen el grupo y tocan "Enviar" por cliente; "Copiar mensaje" para listas de difusión de WhatsApp Business).
+- **Versión real gratis:** GitHub Pages + Supabase gratis + OpenStreetMap; solo se paga el dominio. Pagos en efectivo o transferencia.
+- **Administrador** (`#admin`): solo para el usuario, no para Voglio. Tiene los mensajes y reglas (hora límite, martes), el plan de mantenimiento mensual ($50 de ejemplo) y los precios de combustible. El usuario quiere cobrarles mantenimiento mensual por esto.
 - **Repartidor:** también puede tocar "Ir primero" para cambiar el orden, y elige el combustible de su moto.
 - **Fotos de sabores:** de Pexels, licencia libre (IDs en el README). `img/hero.jpg` es la foto real de las tarrinas de Voglio.
 
