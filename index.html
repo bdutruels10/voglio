@@ -334,6 +334,8 @@ footer.foot .wordmark{font-size:40px}
 .urgbtn:hover{border-color:var(--bad);color:var(--bad)}
 .urgbtn.on{background:var(--bad);border:1px solid var(--bad);color:#fff}
 .sentok{font-size:13px;font-weight:800;color:var(--ok);white-space:nowrap}
+.cjbar{display:flex;height:28px;border-radius:10px;overflow:hidden;background:var(--soft)}
+.cjbar i{display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800;font-style:normal;transition:width .4s;min-width:0;white-space:nowrap;overflow:hidden}
 .ghost{border:1px solid var(--line);background:var(--surface);padding:5px 10px;border-radius:9px;font-weight:700;font-size:13px;text-decoration:none;color:var(--ink)}
 .ghost:hover{border-color:var(--ink)}
 .ghost.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
@@ -693,6 +695,7 @@ svg.leaflet-image-layer.leaflet-interactive path {pointer-events: visiblePainted
   <nav class="ptabs" id="ptabs" aria-label="Secciones del panel">
     <button data-p="hoy" aria-pressed="true">Pedidos<span class="cnt" id="c-new">0</span></button>
     <button data-p="vivo" aria-pressed="false">Reparto en vivo<span class="live" id="liveDot" hidden></span></button>
+    <button data-p="caja" aria-pressed="false">Caja</button>
     <button data-p="numeros" aria-pressed="false">Números</button>
     <button data-p="clientes" aria-pressed="false">Clientes y promos</button>
     <button data-p="mes" aria-pressed="false">Combo</button>
@@ -746,6 +749,21 @@ svg.leaflet-image-layer.leaflet-interactive path {pointer-events: visiblePainted
           <p class="note" id="r-note"></p>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div id="p-caja" hidden style="display:grid;gap:20px">
+    <div class="cardhead"><div class="segs" id="cj-per" role="group" aria-label="Periodo"><button type="button" data-per="hoy" aria-pressed="true">Hoy</button><button type="button" data-per="semana" aria-pressed="false">Esta semana</button><button type="button" data-per="mes" aria-pressed="false">Este mes</button></div><span class="note">Se suma solo cada vez que el repartidor marca "Entregado".</span></div>
+    <div class="kpis">
+      <div class="kpi"><span>Efectivo</span><b class="tabular" id="cj-ef">$0</b><small id="cj-efs"></small></div>
+      <div class="kpi"><span>Transferencia</span><b class="tabular" id="cj-tr">$0</b><small id="cj-trs"></small></div>
+      <div class="kpi"><span>Total cobrado</span><b class="tabular" id="cj-tot">$0</b><small id="cj-tots"></small></div>
+      <div class="kpi"><span>Por cobrar</span><b class="tabular" id="cj-fac">$0</b><small>facturas de negocios</small></div>
+    </div>
+    <div class="card"><h2>Efectivo y transferencia</h2><div class="cjbar" id="cj-bar"></div><div class="legend"><span><i style="background:var(--ok)"></i>Efectivo</span><span><i style="background:var(--azul)"></i>Transferencia</span></div></div>
+    <div class="pcols">
+      <div class="card"><div class="cardhead"><h2>Cobros de hoy</h2><span class="tagx tabular" id="cj-n"></span></div><div class="list tabular" id="cj-list"></div></div>
+      <div class="pcol"><div class="card"><h2>Efectivo para cuadrar</h2><p class="bignum tabular" id="cj-drv" style="font-size:44px">$0</p><p class="note" id="cj-drvs"></p></div></div>
     </div>
   </div>
 
@@ -951,7 +969,7 @@ const tarrinasOf=k=>k==="mes"?2:isV(k)?0:1;
 const totOf=o=>Object.keys(o.items).reduce((a,k)=>a+o.items[k]*unitPrice(k,o.tipo),0);
 function nameOf(k){if(k==="mes")return[month.title,"Combo · 2 × ½ L"];if(isV(k))return[byK(base(k)).n,"Vasito"];return[byK(k).n,"½ litro"]}
 const itemsTxt=o=>Object.keys(o.items).map(k=>`${o.items[k]} × ${nameOf(k)[0]}${isV(k)?" (vasito)":""}`).join(" · ");
-const firstName=o=>o.name.split(" ")[0];
+const firstName=o=>o.tipo==="negocio"?o.name.split(" · ")[0]:o.name.split(" ")[0];
 function sendMsg(key,o,txt){if(!AUTO[key])return;msgs.unshift({t:hhmm(nowMin()),to:o.name,txt})}
 function log(txt,cls){feed.unshift({t:hhmm(nowMin()),txt,cls,fresh:true})}
 function addEvent(o,st,extra){o.events.push({t:hhmm(nowMin()),txt:stOf(st).t+(extra?" · "+extra:"")})}
@@ -1159,7 +1177,7 @@ function renderDriver(){
   drawMap($("dmap"),{compact:true});
   const s=$("d-start");if(s)s.onclick=()=>{routeStarted=true;START=(nowMin()>=7*60&&nowMin()<=17*60)?nowMin():10*60;plan();log(`${DRIVER} salió a repartir con ${ROUTE.length} pedidos`);ROUTE.forEach(o=>{o.st="camino";addEvent(o,"camino");sendMsg("salio",o,`${firstName(o)}, tu pedido ${o.id} va en camino. Síguelo aquí: voglio.ec/s/${o.id}`)});
     const n=nextStop();if(n)sendMsg("llega",n,`${firstName(n)}, eres la primera entrega. Llegamos en unos minutos 🛵`);renderAll();toast("Ruta iniciada. Los clientes ya fueron avisados por WhatsApp.")};
-  const d=$("d-done");if(d)d.onclick=()=>{const o=nextStop(),how=o.pay.startsWith("Efectivo")?payPick:o.pay;o.paid=how;if(how==="Efectivo")o.cash=totOf(o);DONE_ORDER.push(o);
+  const d=$("d-done");if(d)d.onclick=()=>{const o=nextStop(),how=o.pay.startsWith("Efectivo")?payPick:o.pay;o.paid=how;o.paidAt=hhmm(nowMin());if(how==="Efectivo")o.cash=totOf(o);DONE_ORDER.push(o);
     setStatus(o,"entregado",how==="Efectivo"?`cobró ${money(totOf(o))} en efectivo`:how);const n=nextStop();if(n)sendMsg("llega",n,`${firstName(n)}, eres la siguiente entrega. Llegamos en unos 10 minutos 🛵`);payPick="Efectivo";renderAll();toast(`Entregado. ${firstName(o)} recibió su WhatsApp.`)};
   const f=$("d-fail");if(f)f.onclick=()=>{const o=nextStop();o.st="prep";o.date=dayOff(1);o.failed=true;o.events.push({t:hhmm(nowMin()),txt:"No se pudo entregar · pasa a mañana"});log(`<b>${o.id}</b>: el cliente no estaba. Se movió a mañana.`,"bad");sendMsg("llega",o,`Hola ${firstName(o)}, pasamos y no te encontramos. ¿Te lo llevamos mañana?`);renderAll()};
   $("phone").querySelectorAll("[data-pay]").forEach(b=>b.onclick=()=>{payPick=b.dataset.pay;renderDriver()});
@@ -1177,6 +1195,21 @@ const EVST={"Nueva":"var(--azul)","Cotización enviada":"var(--warn)","Confirmad
 const evPrice=e=>Math.round(e.tar*AVG);
 const evMsg=e=>`Hola ${e.name.split(" · ")[1]||""}, gracias por escribir a Voglio. Para ${e.inv} invitados te recomendamos ${e.tar} tarrinas de ½ L (${String(e.tar/2).replace(".",",")} litros) en 3 o 4 sabores: $${evPrice(e)}${e.srv?" más el carrito con persona que sirve":""}. ¿Te reservamos la fecha del ${fmtShort(e.date)}?`;
 const stMsg=o=>{const n=firstName(o);return{nuevo:`Hola ${n}, recibimos tu pedido ${o.id}. En un ratito te lo confirmamos.`,prep:`Hola ${n}, confirmamos tu pedido ${o.id}. Ya lo estamos preparando.`,camino:`${n}, tu pedido ${o.id} va en camino. Síguelo aquí: voglio.ec/s/${o.id}`,entregado:`¡Gracias ${n}! ¿Qué tal estuvo tu helado? Califícanos aquí: voglio.ec/s/${o.id}`}[o.st]};
+/* Caja: cobros por método. Lo de hoy sale de las entregas; semana y mes suman lo anterior (datos de ejemplo). */
+let cjPer="hoy";
+const CJ_EARLY=[{t:"09:20",n:"Lucía Paredes",m:"Transferencia",v:17.98},{t:"09:35",n:"Fernando Ríos",m:"Efectivo",v:13.98},{t:"09:50",n:"Kiosko Puerto Azul",m:"Factura 15 días",v:63.92}];
+const CJ_PREV={semana:{ef:412.40,tr:538.25,fac:186},mes:{ef:1630.45,tr:2105.90,fac:612}};
+function cjToday(){return[...CJ_EARLY,...orders.filter(o=>o.st==="entregado"&&o.paid&&o.date===TODAY).map(o=>({t:o.paidAt||"",n:o.name.split(" · ")[0],m:o.paid,v:totOf(o)}))]}
+function renderCaja(){const td=cjToday(),sum=m=>td.filter(x=>x.m.startsWith(m)).reduce((a,x)=>a+x.v,0);
+  const prev=cjPer==="hoy"?{ef:0,tr:0,fac:0}:CJ_PREV[cjPer],ef=prev.ef+sum("Efectivo"),tr=prev.tr+sum("Transferencia"),fac=prev.fac+sum("Factura"),tot=ef+tr;
+  const pct=v=>tot?Math.round(v/tot*100):0,lbl={hoy:"hoy",semana:"esta semana",mes:"este mes"}[cjPer];
+  $("cj-ef").textContent=money(ef);$("cj-efs").textContent=`${pct(ef)}% de lo cobrado ${lbl}`;$("cj-tr").textContent=money(tr);$("cj-trs").textContent=`${pct(tr)}% de lo cobrado ${lbl}`;
+  $("cj-tot").textContent=money(tot);$("cj-tots").textContent=`cobrado ${lbl}`;$("cj-fac").textContent=money(fac);
+  $("cj-bar").innerHTML=`<i style="width:${pct(ef)}%;background:var(--ok)">${pct(ef)>12?pct(ef)+"%":""}</i><i style="width:${pct(tr)}%;background:var(--azul)">${pct(tr)>12?pct(tr)+"%":""}</i>`;
+  $("cj-n").textContent=td.length+" cobros";
+  $("cj-list").innerHTML=td.slice().reverse().map(x=>`<div><span><b>${esc(x.n)}</b><br><small>${x.t} · ${x.m.startsWith("Factura")?"Factura a 15 días (por cobrar)":x.m}</small></span><b style="color:${x.m.startsWith("Efectivo")?"var(--ok)":x.m.startsWith("Factura")?"var(--muted)":"var(--azul)"}">${money(x.v)}</b></div>`).join("");
+  const c=cashToday();$("cj-drv").textContent=money(c);$("cj-drvs").textContent=c?`Es lo que ${DRIVER} cobró en efectivo hoy y debe entregar al volver a la planta.`:`${DRIVER} todavía no ha cobrado efectivo hoy.`}
+$("cj-per").addEventListener("click",e=>{const b=e.target.closest("[data-per]");if(!b)return;cjPer=b.dataset.per;$("cj-per").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));renderCaja()});
 function renderPanel(){
   plan();
   $("today").textContent="Hoy, "+new Date().toLocaleDateString("es-EC",{weekday:"long",day:"numeric",month:"long"});
@@ -1213,7 +1246,7 @@ function renderPanel(){
   $("n-month").textContent="$"+ms.toLocaleString("es-EC");$("n-goal").textContent=`${Math.round(ms/4500*100)}% de la meta de $4.500`;
   const tmx=Math.max(...Object.values(TOP30));
   $("top").innerHTML=Object.entries(TOP30).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="hbar"><span>${byK(k).n}</span><div class="track"><div class="fill" style="width:${v/tmx*100}%;background:${byK(k).lid}"></div></div><b class="tabular">${v}</b></div>`).join("");
-  capacity();margin();if(ptab==="numeros")drawWeekly();
+  capacity();margin();if(ptab==="numeros")drawWeekly();renderCaja();
   $("best").innerHTML=[["Andrés Malo","9 pedidos","Le gusta Avellana · $164 en total"],["Daniela Ortiz","7 pedidos","Pide los viernes · $121"],["Sofía Crespo","6 pedidos","No pide hace 34 días · recordatorio programado"]].map(r=>`<div><span><b>${r[0]}</b><br><small>${r[2]}</small></span><span class="tagx">${r[1]}</span></div>`).join("");
   $("bizlist").innerHTML=[["Del Portal (5 locales)","Reposición semanal automática · unas 90 tarrinas","Al día"],["Café Barranco","Cada semana · unas 12 tarrinas","Debe $186"],["Plaza Gourmet, Machala","Cada 15 días","Al día"]].map(r=>`<div><span><b>${r[0]}</b><br><small>${r[1]}</small></span><span class="tagx">${r[2]}</span></div>`).join("");
   $("lists").innerHTML=`<div><span>Aceptaron recibir mensajes</span><b class="tabular">${212+orders.filter(o=>o.promo).length}</b></div><div><span>Nuevos este mes</span><b class="tabular">+37</b></div><div><span>Compraron después del último mensaje</span><b class="tabular">24 (11%)</b></div>`;
@@ -1235,7 +1268,7 @@ $("board").addEventListener("click",e=>{const u=e.target.closest("[data-urg]");i
 $("autos").addEventListener("change",e=>{const k=e.target.dataset.auto;if(k){AUTO[k]=e.target.checked;toast(e.target.checked?"Automatización activada":"Automatización pausada")}});
 $("evlist").addEventListener("click",e=>{const b=e.target.closest("[data-ev]");if(!b)return;const ev=evReq[+b.dataset.ev];ev.st=b.dataset.to;if(ev.st==="Confirmado")log(`Evento confirmado: <b>${esc(ev.name)}</b> · ${ev.tar} tarrinas`,"ok");renderPanel();toast(ev.st==="Confirmado"?"Evento confirmado":"Marcada como cotizada")});
 $("ptabs").addEventListener("click",e=>{const b=e.target.closest("[data-p]");if(!b)return;ptab=b.dataset.p;$("ptabs").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));
-  ["hoy","vivo","numeros","clientes","mes","eventos"].forEach(p=>$("p-"+p).hidden=p!==ptab);renderPanel()});
+  ["hoy","vivo","caja","numeros","clientes","mes","eventos"].forEach(p=>$("p-"+p).hidden=p!==ptab);renderPanel()});
 function drawWeekly(){
   const W=720,H=260,m={l:48,r:8,t:18,b:28},iw=W-m.l-m.r,ih=H-m.t-m.b,tot=W_CASA.map((v,i)=>v+W_NEG[i]),max=Math.ceil(Math.max(...tot)/250)*250;
   const y=v=>m.t+ih-v/max*ih,gap=iw/WEEKS.length,bw=gap*.56;

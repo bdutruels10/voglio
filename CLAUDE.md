@@ -58,6 +58,7 @@ Tres vistas que comparten los mismos datos: **Cliente** (`#pedir`), **Repartidor
 - **Panel:**
   - Pedidos (tablero por estado).
   - Reparto en vivo (mapa ilustrativo, lo que va pasando, efectivo cobrado, gasolina y ahorro).
+  - Caja: efectivo, transferencia, total y facturas por cobrar (hoy, semana, mes), cobros de hoy y efectivo que trae el repartidor.
   - Números (gráfico semanal, sabores, uso de máquinas, ganancia por tarrina).
   - Clientes y promos (opiniones, segmentos).
   - Combo (editor con foto del helado que se sube y aviso de cuánto ahorra el cliente) y Eventos.
