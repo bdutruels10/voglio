@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ultra&family=Raleway:wght@400;500;600;700;800;900&family=Reenie+Beanie&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@144,900,100,1&display=swap">
 <style>
-/* Layout: Voglio brand manual (crema/celeste/lavanda/negro + azul, Ultra/Raleway/Reenie Beanie). Three demo views: Cliente (Pedir, Eventos, Sabor del mes, Mi pedido), Repartidor (phone-style route app), Panel (Pedidos, Reparto en vivo, Números, Clientes, Automático, Sabor del mes, Eventos). One shared in-memory store so a change in any view shows in the others. */
+/* Layout: Voglio brand manual (crema/celeste/lavanda/negro + azul, Ultra/Raleway/Reenie Beanie). Three demo views: Cliente (Pedir, Eventos, Combo, Mi pedido), Repartidor (phone-style route app), Panel (Pedidos, Reparto en vivo, Números, Clientes, Combo, Eventos; Automático vive en Administrador). One shared in-memory store so a change in any view shows in the others. */
 :root{
   --bg:#FBF1EA; --surface:#FFFAF6; --crema:#F7E2D7; --soft:#F3E4DA; --line:#EAD8CC;
   --ink:#151515; --muted:#5F5753; --azul:#3580AF; --lavanda:#B8B4D2; --choco:#85513B; --pista:#D1D7B2;
@@ -166,12 +166,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .fbuy{display:grid;gap:10px;margin-top:auto;padding-top:8px}
 .fbuy .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .price{font-size:22px;font-weight:900}
-.minis{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:560px){.minis{grid-template-columns:1fr}}
-.minis a,.minis button{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px;font-size:14px;color:var(--muted);transition:transform .15s}
-.minis a:hover,.minis button:hover{transform:translateY(-2px);border-color:var(--ink)}
-.minis b{display:block;font-family:var(--display);font-weight:400;font-size:18px;color:var(--ink)}
-.minis .go{font-size:20px;color:var(--ink)}
+.quick{display:flex;gap:8px;flex-wrap:wrap}
+.quick a,.quick button{border:2px solid var(--hero-ink);background:transparent;color:var(--hero-ink);border-radius:999px;padding:7px 14px;font-weight:800;font-size:14px;text-decoration:none}
+.quick a:hover,.quick button:hover{background:var(--hero-ink);color:var(--hero)}
+.was{text-decoration:line-through;color:var(--muted);font-weight:600;font-size:15px;margin-right:6px}
+.save{display:inline-block;background:#B3261E;color:#fff;font-size:12px;font-weight:800;padding:2px 8px;border-radius:6px}
 .bizbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--crema);border-radius:14px;padding:10px 14px;font-size:14px;font-weight:600}
 .back{font-size:14px;font-weight:700;text-decoration:none;color:var(--muted);justify-self:start}
 .back:hover{color:var(--ink)}
@@ -380,6 +379,181 @@ footer.foot .wordmark{font-size:40px}
 .saving div{background:var(--soft);border-radius:12px;padding:10px 12px}
 .saving b{display:block;font-size:21px;font-family:var(--display);font-weight:400}
 .saving .good b{color:var(--ok)}
+/* Leaflet 1.9.4 (mapa para marcar la ubicación) */
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-tile-container,
+.leaflet-pane > svg,
+.leaflet-pane > canvas,
+.leaflet-zoom-box,
+.leaflet-image-layer,
+.leaflet-layer {position: absolute; left: 0; top: 0; }
+.leaflet-container {overflow: hidden; }
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {-webkit-user-select: none; -moz-user-select: none; user-select: none; -webkit-user-drag: none; }
+.leaflet-tile::selection {background: transparent; }
+.leaflet-safari .leaflet-tile {image-rendering: -webkit-optimize-contrast; }
+.leaflet-safari .leaflet-tile-container {width: 1600px; height: 1600px; -webkit-transform-origin: 0 0; }
+.leaflet-marker-icon,
+.leaflet-marker-shadow {display: block; }
+.leaflet-container .leaflet-overlay-pane svg {max-width: none !important; max-height: none !important; }
+.leaflet-container .leaflet-marker-pane img,
+.leaflet-container .leaflet-shadow-pane img,
+.leaflet-container .leaflet-tile-pane img,
+.leaflet-container img.leaflet-image-layer,
+.leaflet-container .leaflet-tile {max-width: none !important; max-height: none !important; width: auto; padding: 0; }
+.leaflet-container img.leaflet-tile {mix-blend-mode: plus-lighter; }
+.leaflet-container.leaflet-touch-zoom {-ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; }
+.leaflet-container.leaflet-touch-drag {-ms-touch-action: pinch-zoom; touch-action: none; touch-action: pinch-zoom; }
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {-ms-touch-action: none; touch-action: none; }
+.leaflet-container {-webkit-tap-highlight-color: transparent; }
+.leaflet-container a {-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4); }
+.leaflet-tile {filter: inherit; visibility: hidden; }
+.leaflet-tile-loaded {visibility: inherit; }
+.leaflet-zoom-box {width: 0; height: 0; -moz-box-sizing: border-box; box-sizing: border-box; z-index: 800; }
+.leaflet-overlay-pane svg {-moz-user-select: none; }
+.leaflet-pane         { z-index: 400; }
+.leaflet-tile-pane    { z-index: 200; }
+.leaflet-overlay-pane { z-index: 400; }
+.leaflet-shadow-pane  { z-index: 500; }
+.leaflet-marker-pane  { z-index: 600; }
+.leaflet-tooltip-pane   { z-index: 650; }
+.leaflet-popup-pane   { z-index: 700; }
+.leaflet-map-pane canvas { z-index: 100; }
+.leaflet-map-pane svg    { z-index: 200; }
+.leaflet-vml-shape {width: 1px; height: 1px; }
+.lvml {behavior: url(#default#VML); display: inline-block; position: absolute; }
+.leaflet-control {position: relative; z-index: 800; pointer-events: visiblePainted; pointer-events: auto; }
+.leaflet-top,
+.leaflet-bottom {position: absolute; z-index: 1000; pointer-events: none; }
+.leaflet-top {top: 0; }
+.leaflet-right {right: 0; }
+.leaflet-bottom {bottom: 0; }
+.leaflet-left {left: 0; }
+.leaflet-control {float: left; clear: both; }
+.leaflet-right .leaflet-control {float: right; }
+.leaflet-top .leaflet-control {margin-top: 10px; }
+.leaflet-bottom .leaflet-control {margin-bottom: 10px; }
+.leaflet-left .leaflet-control {margin-left: 10px; }
+.leaflet-right .leaflet-control {margin-right: 10px; }
+.leaflet-fade-anim .leaflet-popup {opacity: 0; -webkit-transition: opacity 0.2s linear; -moz-transition: opacity 0.2s linear; transition: opacity 0.2s linear; }
+.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {opacity: 1; }
+.leaflet-zoom-animated {-webkit-transform-origin: 0 0; -ms-transform-origin: 0 0; transform-origin: 0 0; }
+svg.leaflet-zoom-animated {will-change: transform; }
+.leaflet-zoom-anim .leaflet-zoom-animated {-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1); -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1); transition:         transform 0.25s cubic-bezier(0,0,0.25,1); }
+.leaflet-zoom-anim .leaflet-tile,
+.leaflet-pan-anim .leaflet-tile {-webkit-transition: none; -moz-transition: none; transition: none; }
+.leaflet-zoom-anim .leaflet-zoom-hide {visibility: hidden; }
+.leaflet-interactive {cursor: pointer; }
+.leaflet-grab {cursor: -webkit-grab; cursor:    -moz-grab; cursor:         grab; }
+.leaflet-crosshair,
+.leaflet-crosshair .leaflet-interactive {cursor: crosshair; }
+.leaflet-popup-pane,
+.leaflet-control {cursor: auto; }
+.leaflet-dragging .leaflet-grab,
+.leaflet-dragging .leaflet-grab .leaflet-interactive,
+.leaflet-dragging .leaflet-marker-draggable {cursor: move; cursor: -webkit-grabbing; cursor:    -moz-grabbing; cursor:         grabbing; }
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-image-layer,
+.leaflet-pane > svg path,
+.leaflet-tile-container {pointer-events: none; }
+.leaflet-marker-icon.leaflet-interactive,
+.leaflet-image-layer.leaflet-interactive,
+.leaflet-pane > svg path.leaflet-interactive,
+svg.leaflet-image-layer.leaflet-interactive path {pointer-events: visiblePainted; pointer-events: auto; }
+.leaflet-container {background: #ddd; outline-offset: 1px; }
+.leaflet-container a {color: #0078A8; }
+.leaflet-zoom-box {border: 2px dotted #38f; background: rgba(255,255,255,0.5); }
+.leaflet-container {font-family: "Helvetica Neue", Arial, Helvetica, sans-serif; font-size: 12px; font-size: 0.75rem; line-height: 1.5; }
+.leaflet-bar {box-shadow: 0 1px 5px rgba(0,0,0,0.65); border-radius: 4px; }
+.leaflet-bar a {background-color: #fff; border-bottom: 1px solid #ccc; width: 26px; height: 26px; line-height: 26px; display: block; text-align: center; text-decoration: none; color: black; }
+.leaflet-bar a,
+.leaflet-control-layers-toggle {background-position: 50% 50%; background-repeat: no-repeat; display: block; }
+.leaflet-bar a:hover,
+.leaflet-bar a:focus {background-color: #f4f4f4; }
+.leaflet-bar a:first-child {border-top-left-radius: 4px; border-top-right-radius: 4px; }
+.leaflet-bar a:last-child {border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; border-bottom: none; }
+.leaflet-bar a.leaflet-disabled {cursor: default; background-color: #f4f4f4; color: #bbb; }
+.leaflet-touch .leaflet-bar a {width: 30px; height: 30px; line-height: 30px; }
+.leaflet-touch .leaflet-bar a:first-child {border-top-left-radius: 2px; border-top-right-radius: 2px; }
+.leaflet-touch .leaflet-bar a:last-child {border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; }
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {font: bold 18px 'Lucida Console', Monaco, monospace; text-indent: 1px; }
+.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {font-size: 22px; }
+.leaflet-control-layers {box-shadow: 0 1px 5px rgba(0,0,0,0.4); background: #fff; border-radius: 5px; }
+.leaflet-control-layers-toggle {background-image: url(images/layers.png); width: 36px; height: 36px; }
+.leaflet-retina .leaflet-control-layers-toggle {background-image: url(images/layers-2x.png); background-size: 26px 26px; }
+.leaflet-touch .leaflet-control-layers-toggle {width: 44px; height: 44px; }
+.leaflet-control-layers .leaflet-control-layers-list,
+.leaflet-control-layers-expanded .leaflet-control-layers-toggle {display: none; }
+.leaflet-control-layers-expanded .leaflet-control-layers-list {display: block; position: relative; }
+.leaflet-control-layers-expanded {padding: 6px 10px 6px 6px; color: #333; background: #fff; }
+.leaflet-control-layers-scrollbar {overflow-y: scroll; overflow-x: hidden; padding-right: 5px; }
+.leaflet-control-layers-selector {margin-top: 2px; position: relative; top: 1px; }
+.leaflet-control-layers label {display: block; font-size: 13px; font-size: 1.08333em; }
+.leaflet-control-layers-separator {height: 0; border-top: 1px solid #ddd; margin: 5px -10px 5px -6px; }
+.leaflet-default-icon-path {background-image: url(images/marker-icon.png); }
+.leaflet-container .leaflet-control-attribution {background: #fff; background: rgba(255, 255, 255, 0.8); margin: 0; }
+.leaflet-control-attribution,
+.leaflet-control-scale-line {padding: 0 5px; color: #333; line-height: 1.4; }
+.leaflet-control-attribution a {text-decoration: none; }
+.leaflet-control-attribution a:hover,
+.leaflet-control-attribution a:focus {text-decoration: underline; }
+.leaflet-attribution-flag {display: inline !important; vertical-align: baseline !important; width: 1em; height: 0.6669em; }
+.leaflet-left .leaflet-control-scale {margin-left: 5px; }
+.leaflet-bottom .leaflet-control-scale {margin-bottom: 5px; }
+.leaflet-control-scale-line {border: 2px solid #777; border-top: none; line-height: 1.1; padding: 2px 5px 1px; white-space: nowrap; -moz-box-sizing: border-box; box-sizing: border-box; background: rgba(255, 255, 255, 0.8); text-shadow: 1px 1px #fff; }
+.leaflet-control-scale-line:not(:first-child) {border-top: 2px solid #777; border-bottom: none; margin-top: -2px; }
+.leaflet-control-scale-line:not(:first-child):not(:last-child) {border-bottom: 2px solid #777; }
+.leaflet-touch .leaflet-control-attribution,
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {box-shadow: none; }
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {border: 2px solid rgba(0,0,0,0.2); background-clip: padding-box; }
+.leaflet-popup {position: absolute; text-align: center; margin-bottom: 20px; }
+.leaflet-popup-content-wrapper {padding: 1px; text-align: left; border-radius: 12px; }
+.leaflet-popup-content {margin: 13px 24px 13px 20px; line-height: 1.3; font-size: 13px; font-size: 1.08333em; min-height: 1px; }
+.leaflet-popup-content p {margin: 17px 0; margin: 1.3em 0; }
+.leaflet-popup-tip-container {width: 40px; height: 20px; position: absolute; left: 50%; margin-top: -1px; margin-left: -20px; overflow: hidden; pointer-events: none; }
+.leaflet-popup-tip {width: 17px; height: 17px; padding: 1px; margin: -10px auto 0; pointer-events: auto; -webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg); }
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {background: white; color: #333; box-shadow: 0 3px 14px rgba(0,0,0,0.4); }
+.leaflet-container a.leaflet-popup-close-button {position: absolute; top: 0; right: 0; border: none; text-align: center; width: 24px; height: 24px; font: 16px/24px Tahoma, Verdana, sans-serif; color: #757575; text-decoration: none; background: transparent; }
+.leaflet-container a.leaflet-popup-close-button:hover,
+.leaflet-container a.leaflet-popup-close-button:focus {color: #585858; }
+.leaflet-popup-scrolled {overflow: auto; }
+.leaflet-oldie .leaflet-popup-content-wrapper {-ms-zoom: 1; }
+.leaflet-oldie .leaflet-popup-tip {width: 24px; margin: 0 auto; -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)"; filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678); }
+.leaflet-oldie .leaflet-control-zoom,
+.leaflet-oldie .leaflet-control-layers,
+.leaflet-oldie .leaflet-popup-content-wrapper,
+.leaflet-oldie .leaflet-popup-tip {border: 1px solid #999; }
+.leaflet-div-icon {background: #fff; border: 1px solid #666; }
+.leaflet-tooltip {position: absolute; padding: 6px; background-color: #fff; border: 1px solid #fff; border-radius: 3px; color: #222; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; pointer-events: none; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+.leaflet-tooltip.leaflet-interactive {cursor: pointer; pointer-events: auto; }
+.leaflet-tooltip-top:before,
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {position: absolute; pointer-events: none; border: 6px solid transparent; background: transparent; content: ""; }
+.leaflet-tooltip-bottom {margin-top: 6px; }
+.leaflet-tooltip-top {margin-top: -6px; }
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-top:before {left: 50%; margin-left: -6px; }
+.leaflet-tooltip-top:before {bottom: 0; margin-bottom: -12px; border-top-color: #fff; }
+.leaflet-tooltip-bottom:before {top: 0; margin-top: -12px; margin-left: -6px; border-bottom-color: #fff; }
+.leaflet-tooltip-left {margin-left: -6px; }
+.leaflet-tooltip-right {margin-left: 6px; }
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {top: 50%; margin-top: -6px; }
+.leaflet-tooltip-left:before {right: 0; margin-right: -12px; border-left-color: #fff; }
+.leaflet-tooltip-right:before {left: 0; margin-left: -12px; border-right-color: #fff; }
+@media print {.leaflet-control {-webkit-print-color-adjust: exact; print-color-adjust: exact; }}
+.pickmap{height:220px;border-radius:12px;overflow:hidden;border:1px solid var(--line);z-index:0}
+.pin{width:30px;height:30px;border-radius:50% 50% 50% 0;background:#151515;border:3px solid #F7E2D7;transform:rotate(-45deg);box-shadow:0 4px 10px rgba(0,0,0,.35)}
 @media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -404,6 +578,7 @@ footer.foot .wordmark{font-size:40px}
       <p class="scribble">Hecho x amantes del gelato</p>
       <p class="lead">Siete sabores en tarrina de ½ litro, hechos por Cate y Lili. Pide aquí y llegamos a la puerta de tu casa.</p>
       <div class="herocta"><a class="btn primary" href="#sabores">Pedir ahora</a></div>
+      <div class="quick"><a href="#eventos">🎉 Para un evento</a><button type="button" data-m="negocio" id="bizBtn">🏪 Para mi negocio</button></div>
     </div>
     <div class="arch">
       <div class="frame"><img src="img/hero.jpg" alt="Tarrinas Voglio de chocolate, dulce de leche, menta con chocochips, pistacho, avellana y vainilla apiladas en pirámide"></div>
@@ -417,7 +592,6 @@ footer.foot .wordmark{font-size:40px}
     <div class="bizbar" id="bizbar" hidden><span>Precios para negocios: te cotizamos por WhatsApp. Mínimo 10 tarrinas.</span><button class="ghost" type="button" data-m="casa">Volver a precios normales</button></div>
     <a class="promo" href="#mes" id="promoLink"></a>
     <div class="fgrid" id="fgrid"></div>
-    <div class="minis"><a href="#eventos"><span>¿Tienes un evento?<b>Calcula cuánto helado</b></span><span class="go">→</span></a><button type="button" data-m="negocio" id="bizBtn"><span>¿Tienes un negocio?<b>Pide al por mayor</b></span><span class="go">→</span></button></div>
     <section class="where" aria-labelledby="whereT">
       <div style="display:grid;gap:6px"><span class="hand">¿Lo quieres ya?</span><h2 id="whereT">Encuéntranos en percha</h2><p class="note">¿Prefieres comprarlo tú? Búscanos aquí.</p></div>
       <div class="wlist" id="where"></div>
@@ -463,7 +637,7 @@ footer.foot .wordmark{font-size:40px}
 <div id="s-mes" hidden>
   <section class="page"><div class="wrap">
     <a class="back" href="#pedir">← Volver a los sabores</a>
-    <div style="display:grid;gap:6px;max-width:640px"><span class="hand">Solo este mes</span><h2 style="font-size:clamp(32px,4.6vw,46px)">Sabor del mes</h2><p style="color:var(--muted);font-size:17px">Por tiempo limitado. Cuando se acaba, se acaba.</p></div>
+    <div style="display:grid;gap:6px;max-width:640px"><span class="hand">Juntos salen más baratos</span><h2 style="font-size:clamp(32px,4.6vw,46px)">Combo para compartir</h2><p style="color:var(--muted);font-size:17px">Dos sabores a mejor precio. Cuando se acaba, se acaba.</p></div>
     <div class="mgrid">
       <article class="feature" id="feature"></article>
       <div class="card"><h2 id="voteTitle"></h2><p class="note">Vota y te avisamos por WhatsApp cuando salga la ganadora.</p><div class="vlist" id="vote"></div></div>
@@ -511,7 +685,7 @@ footer.foot .wordmark{font-size:40px}
     <button data-p="vivo" aria-pressed="false">Reparto en vivo<span class="live" id="liveDot" hidden></span></button>
     <button data-p="numeros" aria-pressed="false">Números</button>
     <button data-p="clientes" aria-pressed="false">Clientes y promos</button>
-    <button data-p="mes" aria-pressed="false">Sabor del mes</button>
+    <button data-p="mes" aria-pressed="false">Combo</button>
     <button data-p="eventos" aria-pressed="false">Eventos<span class="cnt" id="c-ev">0</span></button>
   </nav>
 
@@ -595,7 +769,7 @@ footer.foot .wordmark{font-size:40px}
   <div id="p-clientes" hidden class="pcols">
     <div class="card">
       <h2>Enviar promoción</h2>
-      <label for="pm-text">Mensaje<textarea id="pm-text" rows="3">¡Llegó "Chisme entre amigas"! Vainilla + Pistacho en ½ litro, solo este mes. Pide en voglio.ec</textarea></label>
+      <label for="pm-text">Mensaje<textarea id="pm-text" rows="3">Llegó "Chisme entre amigas": Vainilla + Pistacho juntos salen más baratos. Pide en voglio.ec</textarea></label>
       <label for="pm-to">Para<select id="pm-to"><option value="todos">Todos los contactos</option><option value="casa">Solo clientes de casa</option><option value="negocio">Solo negocios</option><option value="pista">Les gusta Pistacho o Avellana</option><option value="dormidos">No piden hace más de 30 días</option></select></label>
       <div><p class="note" style="margin-bottom:6px">Vista previa en WhatsApp</p><div class="bubble" id="pm-prev"></div></div>
       <button class="btn primary sm" id="pm-send" type="button" style="justify-self:start">Programar envío</button>
@@ -611,16 +785,17 @@ footer.foot .wordmark{font-size:40px}
 
   <div id="p-mes" hidden class="pcols">
     <form class="card" id="mf" novalidate>
-      <div class="cardhead"><h2>Producto del mes</h2><label class="switchrow" for="m-on"><input type="checkbox" id="m-on" checked> Publicado</label></div>
-      <p class="note">Usa sabores que ya tienen registro sanitario: combinaciones, packs o precios especiales.</p>
+      <div class="cardhead"><h2>Combo para compartir</h2><label class="switchrow" for="m-on"><input type="checkbox" id="m-on" checked> Publicado</label></div>
+      <p class="note">Dos sabores que ya tienen registro sanitario, a menos que comprarlos por separado. En el sitio no dice "promoción": se muestra el precio normal tachado y cuánto se ahorra.</p>
       <label for="m-title">Nombre<input id="m-title"></label>
       <label for="m-desc">Descripción<textarea id="m-desc" rows="2"></textarea></label>
       <div class="two">
         <label for="m-a">Sabor 1<select id="m-a"></select></label>
         <label for="m-b">Sabor 2<select id="m-b"></select></label>
-        <label for="m-price">Precio del pack<input id="m-price" type="number" step="0.5" min="0"></label>
+        <label for="m-price">Precio del combo<input id="m-price" type="number" step="0.01" min="0"></label>
         <label for="m-until">Disponible hasta<input id="m-until" type="date"></label>
       </div>
+      <p class="info" id="m-save"></p>
       <label for="m-img">Foto del helado<input id="m-img" type="file" accept="image/*"></label>
       <div class="imgprev" id="m-imgprev"></div>
       <p class="note">Los cambios se ven al instante en el sitio.</p>
@@ -730,7 +905,9 @@ const ST=[{k:"nuevo",t:"Recibido",c:"var(--azul)"},{k:"prep",t:"En preparación"
 const stOf=k=>ST.find(s=>s.k===k);
 const PLANTA={name:"Planta Voglio · Entre Ríos",lat:-2.1520,lng:-79.8740};
 let seq=1046,routeStarted=false,lastId=null,trackId=null;
-let month={on:true,title:"Chisme entre amigas",desc:"Vainilla + Pistacho, dos tarrinas de ½ litro. La combinación para compartir.",a:"vainilla",b:"pistacho",price:14.99,until:dayOff(20)};
+let month={on:true,title:"Chisme entre amigas",desc:"Vainilla + Pistacho, dos tarrinas de ½ litro. La combinación para compartir.",a:"vainilla",b:"pistacho",price:13.99,until:dayOff(20)};
+const comboReg=()=>byK(month.a).p+byK(month.b).p,comboSave=()=>Math.max(0,comboReg()-month.price);
+const comboPrice=()=>`${comboSave()>0?`<span class="was">${money(comboReg())}</span>`:""}${money(month.price)}`;
 let poll={on:true,q:"¿Qué combinación quieres el próximo mes?",opts:[{n:"Como la primera cita",s:"Chocolate + Avellana",v:44},{n:"A todo le pongo manjar",s:"Dulce de leche + Vainilla",v:37},{n:"Solo una cucharada más",s:"Menta con chocochips + Chocolate",v:29}]};
 let voted=null;
 const mk=(id,tipo,name,phone,sector,addr,items,pay,st,date=TODAY,extra={})=>{const c=SECTORS[sector]||[-2.15,-79.88],R=rng(id);
@@ -753,7 +930,7 @@ const AUTOS=[["confirm","Confirmación al recibir el pedido","El cliente recibe 
 const unitPrice=(k,tipo)=>k==="mes"?month.price:(isV(k)?byK(base(k)).vp:byK(k).p)*(tipo==="negocio"?NEG:1);
 const tarrinasOf=k=>k==="mes"?2:isV(k)?0:1;
 const totOf=o=>Object.keys(o.items).reduce((a,k)=>a+o.items[k]*unitPrice(k,o.tipo),0);
-function nameOf(k){if(k==="mes")return[month.title,"Pack del mes · 2 × ½ L"];if(isV(k))return[byK(base(k)).n,"Vasito"];return[byK(k).n,"½ litro"]}
+function nameOf(k){if(k==="mes")return[month.title,"Combo · 2 × ½ L"];if(isV(k))return[byK(base(k)).n,"Vasito"];return[byK(k).n,"½ litro"]}
 const itemsTxt=o=>Object.keys(o.items).map(k=>`${o.items[k]} × ${nameOf(k)[0]}${isV(k)?" (vasito)":""}`).join(" · ");
 const firstName=o=>o.name.split(" ")[0];
 function sendMsg(key,o,txt){if(!AUTO[key])return;msgs.unshift({t:hhmm(nowMin()),to:o.name,txt})}
@@ -832,9 +1009,9 @@ function renderCtl(){F.forEach(f=>{const el=$("ctl-"+f.k);if(!el)return;const v=
 function setQty(key,d,src){cart[key]=Math.max(0,(cart[key]||0)+d);if(!cart[key])delete cart[key];if(d>0&&src&&!src.closest(".drawer")){fly(key,src);toast("Agregado: "+nameOf(key)[0])}renderCtl();if(isOpen())renderDrawer()}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-key]");if(b){setQty(b.dataset.key,+b.dataset.d,b);return}
   const z=e.target.closest("[data-size]");if(z){const[k,v]=z.dataset.size.split("|");sel[k]=v;z.parentElement.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===z));const a=$("art-"+k);a.classList.toggle("isv",v==="v");a.innerHTML=v==="v"?vaso(k):pint(k);a.animate?.([{transform:"scale(.85)",opacity:.4},{transform:"scale(1)",opacity:1}],{duration:260,easing:"cubic-bezier(.3,1.4,.5,1)"});renderCtl()}});
-document.addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;mode=b.dataset.m;$("bizbar").hidden=mode!=="negocio";$("bizBtn").hidden=mode==="negocio";
+document.addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;mode=b.dataset.m;$("bizbar").hidden=mode!=="negocio";$("bizBtn").setAttribute("aria-pressed",mode==="negocio");
   if(mode==="negocio"){delete cart.mes}renderGrid();renderPromo();$("sabores").scrollIntoView({behavior:"smooth"})});
-function renderPromo(){const l=$("promoLink");l.hidden=!month.on||mode==="negocio";l.innerHTML=`${month.img?`<span class="ph" style="background-image:url(${month.img})"></span>`:`<div class="mini"><div class="lift">${pint(month.a)}</div><div class="lift">${pint(month.b)}</div></div>`}<span><span class="hand">Sabor del mes</span><b>${esc(month.title)}</b><span class="pp">${byK(month.a).n} + ${byK(month.b).n} · ${money(month.price)}</span></span><span class="go">Lo quiero →</span>`}
+function renderPromo(){const l=$("promoLink");l.hidden=!month.on||mode==="negocio";l.innerHTML=`${month.img?`<span class="ph" style="background-image:url(${month.img})"></span>`:`<div class="mini"><div class="lift">${pint(month.a)}</div><div class="lift">${pint(month.b)}</div></div>`}<span><span class="hand">Juntos salen más baratos</span><b>${esc(month.title)}</b><span class="pp">${byK(month.a).n} + ${byK(month.b).n} · ${comboPrice()}${comboSave()>0?` <span class="save">Ahorras ${money(comboSave())}</span>`:""}</span></span><span class="go">Lo quiero →</span>`}
 function fly(key,src){if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
   const k=key==="mes"?month.a:base(key),from=src.getBoundingClientRect(),to=$("openCart").getBoundingClientRect();
   const el=document.createElement("div");el.className="flyer";el.style.cssText=`left:${from.left+from.width/2-26}px;top:${from.top-40}px;width:52px`;el.innerHTML=isV(key)?vaso(k):pint(k);document.body.appendChild(el);
@@ -874,20 +1051,33 @@ function renderDrawer(){
       <div class="geo" id="c-geobox"></div>
       <label for="c-sector" id="c-sectorlbl">¿En qué zona vives?<select id="c-sector">${opt(Object.keys(SECTORS),keep["c-sector"]||"Samborondón · La Puntilla")}</select></label></div>
       <label for="c-addr">Dirección y referencia<input id="c-addr" value="${esc(keep["c-addr"]||"Urb. Los Arcos, villa 12, junto al parque")}"></label>
-      <label class="check" for="c-promo"><input type="checkbox" id="c-promo" checked> Quiero recibir promociones y el sabor del mes por WhatsApp.</label>
+      <label class="check" for="c-promo"><input type="checkbox" id="c-promo" checked> Quiero recibir novedades y combos por WhatsApp.</label>
     </form><div id="sums"></div>`;
   ["c-date","c-slot"].forEach(id=>$(id).addEventListener("input",sums));renderGeo();sums()}
 /* Ubicación actual del cliente: se guarda con el pedido para que el repartidor llegue directo. */
 let geo=null,geoBusy=false;
 function nearestSector(lat,lng){let best=null,bd=1e9;for(const[n,[a,b]]of Object.entries(SECTORS)){const d=hav({lat,lng},{lat:a,lng:b});if(d<bd){bd=d;best=n}}return[best,bd]}
 function renderGeo(){const box=$("c-geobox");if(!box)return;$("c-sectorlbl").hidden=!!(geo&&geo.km<=25);
-  if(geo){const far=geo.km>25;box.innerHTML=`<div class="info${far?" warn":""}" style="display:grid;gap:6px"><b>${far?"Parece que estás fuera de la zona de reparto":"✓ Tu ubicación quedó guardada"}</b><span class="note">${far?"Repartimos en Guayaquil y Samborondón. Elige tu zona o escríbenos por WhatsApp.":"Cerca de "+esc(geo.sector)+". El repartidor llegará directo a este punto."}</span><span style="display:flex;gap:8px;flex-wrap:wrap"><a class="ghost" href="https://www.google.com/maps/search/?api=1&query=${geo.lat},${geo.lng}" target="_blank" rel="noopener">Ver en el mapa</a><button class="ghost" type="button" id="c-geoclear">Quitar ubicación</button></span></div>`;$("c-geoclear").onclick=()=>{geo=null;renderGeo()};return}
-  box.innerHTML=`<button class="btn azul block" type="button" id="c-geo" ${geoBusy?"disabled":""}>${geoBusy?"Buscando tu ubicación…":"📍 Usar mi ubicación actual"}</button><p class="note" id="c-geomsg" style="text-align:center;margin-top:6px">Así el repartidor llega directo a tu puerta. Si prefieres, elige tu zona abajo.</p>`;
-  $("c-geo").onclick=askGeo}
+  if(geo){box.innerHTML=`<div class="info" style="display:grid;gap:8px"><b id="c-geotitle"></b><span class="note" id="c-geotxt"></span><div class="pickmap" id="c-map"></div><span style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center"><span class="note">Mueve el pin o toca el mapa donde está tu casa.</span><button class="ghost" type="button" id="c-geoclear">Quitar ubicación</button></span></div>`;$("c-geoclear").onclick=()=>{geo=null;renderGeo()};geoText();initMap();return}
+  box.innerHTML=`<button class="btn azul block" type="button" id="c-geo" ${geoBusy?"disabled":""}>${geoBusy?"Buscando tu ubicación…":"📍 Usar mi ubicación actual"}</button><button class="btn quiet block" type="button" id="c-geopin" style="margin-top:8px">Marcar mi casa en el mapa</button><p class="note" id="c-geomsg" style="text-align:center;margin-top:6px">Así el repartidor llega directo a tu puerta. Si prefieres, elige tu zona abajo.</p>`;
+  $("c-geo").onclick=askGeo;$("c-geopin").onclick=()=>{const[a,b]=SECTORS[$("c-sector").value]||[-2.17,-79.9];setGeo(a,b,true);renderGeo()}}
+function setGeo(lat,lng,manual){const[sector,km]=nearestSector(lat,lng);geo={lat,lng,sector,km,manual};if($("c-sector")&&km<=25)$("c-sector").value=sector}
+function geoText(){const t=$("c-geotitle");if(!t)return;const far=geo.km>25;$("c-sectorlbl").hidden=!far;t.textContent=far?"Parece que ese punto está fuera de la zona de reparto":geo.manual?"Marca el punto exacto de tu casa":"✓ Tu ubicación quedó guardada";t.parentElement.classList.toggle("warn",far);
+  $("c-geotxt").textContent=far?"Repartimos en Guayaquil y Samborondón. Mueve el pin o elige tu zona.":"Cerca de "+geo.sector+". El repartidor llegará directo a este punto."}
+let leaflet=null;
+function loadLeaflet(){if(window.L)return Promise.resolve(window.L);if(leaflet)return leaflet;leaflet=new Promise((ok,ko)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";sc.onload=()=>ok(window.L);sc.onerror=()=>{leaflet=null;ko()};document.head.appendChild(sc)});return leaflet}
+function initMap(){const el=$("c-map");loadLeaflet().then(L=>{if(!el.isConnected||!geo)return;
+    const m=L.map(el,{zoomControl:true,attributionControl:true}).setView([geo.lat,geo.lng],16);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
+    const mk=L.marker([geo.lat,geo.lng],{draggable:true,icon:L.divIcon({className:"",html:'<div class="pin"></div>',iconSize:[30,30],iconAnchor:[15,34]})}).addTo(m);
+    const move=ll=>{mk.setLatLng(ll);setGeo(ll.lat,ll.lng,false);geoText()};
+    mk.on("dragend",()=>move(mk.getLatLng()));m.on("click",e=>move(e.latlng));
+    setTimeout(()=>m.invalidateSize(),350)})
+  .catch(()=>{el.outerHTML='<p class="note">No se pudo cargar el mapa. Tu ubicación igual quedó guardada.</p>'})}
 function askGeo(){const msg=t=>{const m=$("c-geomsg");if(m){m.textContent=t;m.style.color="var(--warn)"}};
   if(!navigator.geolocation){msg("Tu navegador no permite compartir la ubicación. Elige tu zona abajo.");return}
   geoBusy=true;renderGeo();
-  navigator.geolocation.getCurrentPosition(p=>{geoBusy=false;const{latitude:lat,longitude:lng}=p.coords,[sector,km]=nearestSector(lat,lng);geo={lat,lng,sector,km};if($("c-sector")&&km<=25)$("c-sector").value=sector;renderGeo()},
+  navigator.geolocation.getCurrentPosition(p=>{geoBusy=false;const{latitude:lat,longitude:lng}=p.coords,[sector,km]=nearestSector(lat,lng);setGeo(lat,lng,false);renderGeo()},
     e=>{geoBusy=false;renderGeo();msg(e.code===1?"No diste permiso para ver tu ubicación. Puedes activarlo en el navegador o elegir tu zona abajo.":"No pudimos obtener tu ubicación. Elige tu zona abajo.")},
     {enableHighAccuracy:true,timeout:12000,maximumAge:60000})}
 function sums(){const t=cartTotals(),biz=mode==="negocio",short=biz&&t.tar<MIN_BIZ,dp=dayProblem($("c-date").value);
@@ -1051,10 +1241,10 @@ $("ev-send").onclick=()=>{const r=calcEv();evReq.unshift({name:`${$("ev-type").v
   $("ev-ok").hidden=false;$("ev-ok").innerHTML=`Solicitud enviada. Voglio te escribe por WhatsApp con la cotización. <a href="#panel"><b>Ver cómo le llega a Voglio</b></a>`;renderPanel()};
 
 /* month */
-function renderMonth(){
+function renderMonth(){const ms=$("m-save");if(ms)ms.textContent=comboSave()>0?`Por separado cuestan ${money(comboReg())}. El cliente ahorra ${money(comboSave())}. Precio por confirmar con Voglio.`:`Por separado cuestan ${money(comboReg())}. Pon un precio menor para que el cliente vea el ahorro.`;
   $("feature").innerHTML=month.on?`${month.img?`<div class="stage ph" style="background-image:url(${month.img})"></div>`:`<div class="stage"><div class="duo"><div class="lift">${pint(month.a)}</div><div class="lift">${pint(month.b)}</div></div></div>`}
-    <div class="fbody"><span class="hand">Edición del mes · hasta el ${fmtShort(month.until)}</span><h2>${esc(month.title)}</h2><p>${esc(month.desc)}</p><div class="fbuy"><div class="row"><span style="font-weight:700">${byK(month.a).n} + ${byK(month.b).n}</span><span class="price tabular">${money(month.price)}</span></div><div id="m-ctl"></div></div></div>`
-    :`<div class="fbody"><h2>Muy pronto</h2><p>El próximo sabor del mes se anuncia pronto. Mientras tanto, vota por el que quieres.</p></div>`;
+    <div class="fbody"><span class="hand">Solo hasta el ${fmtShort(month.until)}</span><h2>${esc(month.title)}</h2><p>${esc(month.desc)}</p><div class="fbuy"><div class="row"><span style="font-weight:700">${byK(month.a).n} + ${byK(month.b).n}</span><span class="price tabular">${comboPrice()}</span></div>${comboSave()>0?`<span><span class="save">Ahorras ${money(comboSave())}</span></span>`:""}<div id="m-ctl"></div></div></div>`
+    :`<div class="fbody"><h2>Muy pronto</h2><p>La próxima combinación se anuncia pronto. Mientras tanto, vota por el que quieres.</p></div>`;
   $("voteTitle").textContent=poll.q;const tot=poll.opts.reduce((a,b)=>a+b.v,0)||1;
   $("vote").innerHTML=!poll.on?'<p class="note">La votación está cerrada por ahora.</p>':poll.opts.map((o,i)=>{const p=Math.round(o.v/tot*100);return`<button class="vopt" type="button" data-vote="${i}" ${voted!==null?"disabled":""}><span class="bar" style="width:0" data-w="${voted!==null?p:0}"></span><span class="vtop"><span>${esc(o.n)}${voted===i?" · tu voto":""}</span><span class="tabular">${voted!==null?p+"%":""}</span></span>${o.s?`<small>${esc(o.s)}</small>`:""}</button>`}).join("")+`<p class="note">${voted!==null?`${tot} votos hasta ahora.`:"Toca una opción para votar."}</p>`;
   requestAnimationFrame(()=>document.querySelectorAll("#vote .bar").forEach(b=>b.style.width=b.dataset.w+"%"));renderPromo();renderCtl()}

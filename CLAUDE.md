@@ -48,9 +48,10 @@ Tres vistas que comparten los mismos datos: **Cliente** (`#pedir`), **Repartidor
 - **Cliente:** vista simplificada a pedido del usuario: poco texto y sin pestañas. Arriba solo el logo y "Tu pedido"; "Mi pedido" aparece después de hacer un pedido. Eventos y "Para mi negocio" son tarjetas pequeñas debajo de los sabores. Texto del inicio: "hechos por Cate y Lili. Pide aquí y llegamos a la puerta de tu casa". Las dos son dueñas; en la web siempre van juntas.
   - Catálogo con foto de cada sabor y la tarrina o vasito ilustrado (SVG), con selector "½ litro | Vasito".
   - Modo "Para mi negocio": precio mayorista que se cotiza por WhatsApp; mínimo 10 tarrinas.
-  - Checkout solo delivery: día, horario, sector, dirección y pago.
+  - Checkout solo delivery: día, horario, pago y "¿Dónde te lo llevamos?": ubicación actual o pin en un mapa (Leaflet + OpenStreetMap, dentro de la página); si no, "¿En qué zona vives?". Las zonas son donde vive el cliente, no puntos de despacho.
+  - "Para un evento" y "Para mi negocio" son botones en el inicio, debajo de "Pedir ahora", para no bajar en el celular.
   - **Eventos:** calculadora de tarrinas según invitados.
-  - **Sabor del mes:** pack y votación.
+  - **Combo para compartir** (antes "Sabor del mes"): dos sabores más baratos juntos. No se dice "promoción": se muestra el precio normal tachado y "Ahorras $X". Precio de ejemplo $13.99 (por confirmar). Tiene votación.
   - **Mi pedido:** solo el estado (Recibido, En preparación, En camino, Entregado) más calificación con estrellas y opinión. **Sin mapa ni ubicación del repartidor**; el usuario lo pidió así.
 - **Repartidor:** ruta optimizada (vecino más cercano + 2-opt), próxima parada, "Entregado" con método de pago y "No estaba" (pasa el pedido a mañana).
 - **Panel:**
@@ -58,7 +59,7 @@ Tres vistas que comparten los mismos datos: **Cliente** (`#pedir`), **Repartidor
   - Reparto en vivo (mapa ilustrativo, lo que va pasando, efectivo cobrado, gasolina y ahorro).
   - Números (gráfico semanal, sabores, uso de máquinas, ganancia por tarrina).
   - Clientes y promos (opiniones, segmentos).
-  - Sabor del mes (editor con foto del helado que se sube) y Eventos.
+  - Combo (editor con foto del helado que se sube y aviso de cuánto ahorra el cliente) y Eventos.
   - Urgentes: Voglio marca un pedido como "urgente" y va primero en la ruta.
   - Ganancia por tarrina: costo distinto por sabor (valores de ejemplo; pedir los reales).
   - Gasolina: Extra/Ecopaís, Súper o Diésel con el precio oficial (objeto `FUEL` en `index.html`). El usuario quiere que se revisen cada semana.
@@ -80,4 +81,4 @@ Tres vistas que comparten los mismos datos: **Cliente** (`#pedir`), **Repartidor
 ## Notas técnicas
 - **Entorno:** la red permite unsplash.com, images.unsplash.com e images.pexels.com.
 - **Artefacto:** para republicarlo se usa el archivo `index.html` de este repositorio.
-- **Repositorio:** confirmar con el usuario antes de hacer commit o push.
+- **Repositorio:** el usuario autorizó (25 nov 2026) hacer commit y push a `main` de cada cambio sin preguntar. Después de cada push, GitHub Pages se publica solo en uno o dos minutos.
