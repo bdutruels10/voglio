@@ -17,7 +17,7 @@ Este archivo guarda lo decidido en la conversación con el usuario, para retomar
 - **Zona:** Guayaquil y Samborondón.
 - **Planta de producción:** Entre Ríos, Samborondón. **NO mostrarla al cliente.** Solo se usa internamente como punto de salida de las rutas (en el panel y en la app del repartidor).
 - **Puntos de venta en percha** (solo para comprar; los pedidos de la web son **solo delivery**, sin retiro):
-  - Del Portal: La Joya, Ciudad Celeste, La Piazza Samborondón y Moderna Plaza.
+  - Del Portal: La Joya, Ciudad Celeste, La Piazza Samborondón, Moderna Plaza y Vía a la Costa.
   - Machala: Plaza Gourmet (solo en tienda, sin reparto).
 - **Del Portal** es el distribuidor principal.
 - **7 sabores con registro sanitario.** Tarrina de ½ litro (350 g); precios del catálogo de WhatsApp:
@@ -45,7 +45,7 @@ Este archivo guarda lo decidido en la conversación con el usuario, para retomar
 
 ## Qué tiene `index.html`
 Tres vistas que comparten los mismos datos: **Cliente** (`#pedir`), **Repartidor** (`#repartidor`) y **Panel** (`#panel`).
-- **Cliente:**
+- **Cliente:** vista simplificada a pedido del usuario: poco texto y sin pestañas. Arriba solo el logo y "Tu pedido"; "Mi pedido" aparece después de hacer un pedido. Eventos y "Para mi negocio" son tarjetas pequeñas debajo de los sabores. Texto del inicio: "hechos por Cate y Lili. Pide aquí y llegamos a la puerta de tu casa". Las dos son dueñas; en la web siempre van juntas.
   - Catálogo con foto de cada sabor y la tarrina o vasito ilustrado (SVG), con selector "½ litro | Vasito".
   - Modo "Para mi negocio": precio mayorista que se cotiza por WhatsApp; mínimo 10 tarrinas.
   - Checkout solo delivery: día, horario, sector, dirección y pago.
